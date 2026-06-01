@@ -42,6 +42,16 @@
 \usepackage{setspace}
 \usepackage{titlesec}
 \usepackage{fancyhdr}
+\usepackage[unicode,hidelinks]{hyperref}
+
+% =========================
+% PDF 链接与书签设置
+% =========================
+\hypersetup{
+  bookmarksnumbered=true,
+  bookmarksopen=true,
+  pdfstartview=FitH
+}
 
 % =========================
 % 正文格式设置
@@ -145,6 +155,9 @@
 % 正文开始
 % =========================
 \begin{document}
+
+\tableofcontents
+\clearpage
 
 \section{实验目的及内容}
 
