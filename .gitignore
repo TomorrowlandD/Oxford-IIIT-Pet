@@ -1,0 +1,57 @@
+# Python caches and local environment files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Dataset and downloaded archives
+/data/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# Training outputs that are too large or reproducible
+/outputs/checkpoints/
+/outputs/logs/
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.safetensors
+events.out.tfevents*
+
+# Keep report figures and metric files available for optional tracking.
+# Do not ignore /outputs/figures/ or /outputs/results/ here.
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+/main.pdf
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
