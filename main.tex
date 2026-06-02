@@ -744,6 +744,8 @@ if improved:
 \centering
 \caption{数据划分记录}
 \label{tab:data-split-record}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{10pt}
 \begin{tabular}{lrl}
 \toprule
 划分 & 样本数 & 用途 \\
@@ -755,6 +757,8 @@ if improved:
 \bottomrule
 \end{tabular}
 \end{table}
+
+从表 \ref{tab:data-split-record} 可以看出，本实验没有改变 Oxford-IIIT Pet 数据集的官方测试集设置，而是仅对官方 \code{trainval} 部分进行训练集和验证集划分。这样既可以在训练过程中使用验证集监控模型表现并选择最佳权重，又可以保证最终测试结果只来自独立测试集。分类任务和分割任务均复用同一组划分索引，因此不同模型之间具有一致的数据基础，也便于后续复查训练日志、指标文件和可视化结果。
 
 \begin{figure}[H]
 \centering
@@ -781,6 +785,7 @@ if improved:
 \caption{数据相关原始记录文件}
 \label{tab:data-record-files}
 \resizebox{\textwidth}{!}{
+\renewcommand{\arraystretch}{1.08}
 \begin{tabular}{ll}
 \toprule
 记录内容 & 文件路径 \\
@@ -805,6 +810,8 @@ Oxford-IIIT Pet 数据集提供的 trimap 标注包含 3 种像素值：\texttt{
 \centering
 \caption{trimap 到二值 mask 的转换规则}
 \label{tab:mask-conversion-record}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{10pt}
 \begin{tabular}{llrl}
 \toprule
 原始 trimap 值 & 原始含义 & 二值 mask 值 & 二值含义 \\
@@ -815,6 +822,10 @@ Oxford-IIIT Pet 数据集提供的 trimap 标注包含 3 种像素值：\texttt{
 \bottomrule
 \end{tabular}
 \end{table}
+
+采用上述转换规则后，原始 trimap 中的边界区域被统一并入宠物前景。这一处理方式能够使分割任务更加贴近“提取完整宠物主体”的实验目标，避免模型只学习到宠物内部区域而忽略毛发、耳朵和身体轮廓等边缘结构。由于边界像素本身具有一定标注模糊性，将其作为前景处理也可以减少三分类边界定义带来的额外复杂度。后续分割模型的训练和评估均基于该二值 mask 完成，因此 Pixel Accuracy、前景 IoU、mIoU 和 Dice 等指标反映的是背景与完整宠物前景之间的二分类分割效果。
+
+在预处理检查中，还需要确认图像和 mask 的空间变换保持一致。对于分割任务而言，如果图像缩放、裁剪或翻转后 mask 没有同步变化，就会导致像素标签与宠物主体位置错位，从而影响模型训练。与此同时，mask 属于离散类别标签，在调整尺寸时应使用最近邻插值，避免产生介于 0 和 1 之间的非法像素值。后续的 mask 转换样例图主要用于检查二值化结果、边界区域合并方式以及图像与 mask 的对应关系是否正确。
 
 \begin{figure}[H]
 \centering
