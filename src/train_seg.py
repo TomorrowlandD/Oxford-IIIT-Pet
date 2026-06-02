@@ -51,12 +51,6 @@ def parse_args() -> argparse.Namespace:
         default=True,
         help="Convert trimap to project scheme-B binary masks. Enabled by default.",
     )
-    parser.add_argument(
-        "--no-binary-mask",
-        dest="binary_mask",
-        action="store_false",
-        help="Debug only: keep raw trimap labels. This is not valid for two-class training.",
-    )
     parser.add_argument("--aux-loss-weight", type=float, default=0.4)
     return parser.parse_args()
 

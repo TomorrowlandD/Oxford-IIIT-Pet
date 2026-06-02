@@ -52,12 +52,6 @@ def parse_args() -> argparse.Namespace:
         default=True,
         help="Use the project scheme-B binary masks. Enabled by default.",
     )
-    parser.add_argument(
-        "--no-binary-mask",
-        dest="binary_mask",
-        action="store_false",
-        help="Debug only: keep raw trimaps. This is invalid for two-class evaluation.",
-    )
     return parser.parse_args()
 
 

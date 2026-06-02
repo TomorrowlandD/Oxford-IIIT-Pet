@@ -1,5 +1,6 @@
 {
   "figure": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\outputs\\figures\\fig_seg_predictions.png",
+  "selection_rule": "Top rows are highest-mIoU samples and bottom rows are lowest-mIoU samples, restricted to targets containing both foreground and background when possible.",
   "selection": [
     {
       "dataset_index": 394,
@@ -32,26 +33,6 @@
       "dice": 0.98964042452083
     },
     {
-      "dataset_index": 2292,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\Persian_259.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\Persian_259.png",
-      "pixel_accuracy": 0.0,
-      "background_iou": 0.0,
-      "foreground_iou": 0.0,
-      "miou": 0.0,
-      "dice": 0.0
-    },
-    {
-      "dataset_index": 1858,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\keeshond_7.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\keeshond_7.png",
-      "pixel_accuracy": 0.01625,
-      "background_iou": 0.01625,
-      "foreground_iou": 0.0,
-      "miou": 0.008125,
-      "dice": 0.0
-    },
-    {
       "dataset_index": 2005,
       "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\Maine_Coon_268.jpg",
       "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\Maine_Coon_268.png",
@@ -60,6 +41,26 @@
       "foreground_iou": 0.03779296875,
       "miou": 0.018896484375,
       "dice": 0.07283334901665568
+    },
+    {
+      "dataset_index": 2302,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\Persian_268.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\Persian_268.png",
+      "pixel_accuracy": 0.094619140625,
+      "background_iou": 2.1571947839030124e-05,
+      "foreground_iou": 0.0946014570597082,
+      "miou": 0.04731151450377361,
+      "dice": 0.1728509613239952
+    },
+    {
+      "dataset_index": 2308,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\Persian_273.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\Persian_273.png",
+      "pixel_accuracy": 0.162958984375,
+      "background_iou": 0.0,
+      "foreground_iou": 0.162958984375,
+      "miou": 0.0814794921875,
+      "dice": 0.2802488936659753
     }
   ]
 }

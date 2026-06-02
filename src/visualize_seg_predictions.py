@@ -64,8 +64,19 @@ def load_prediction_rows(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def has_mixed_target(row: dict[str, Any]) -> bool:
+    """Keep report examples with both foreground and background in the target."""
+    foreground_pixels = int(row.get("foreground_target_pixels", 0))
+    valid_pixels = int(row.get("valid_pixels", 0))
+    return 0 < foreground_pixels < valid_pixels
+
+
 def choose_samples(rows: list[dict[str, Any]], count_per_group: int = 3) -> list[dict[str, Any]]:
-    ordered = sorted(rows, key=lambda row: float(row["miou"]))
+    candidates = [row for row in rows if has_mixed_target(row)]
+    if len(candidates) < count_per_group * 2:
+        candidates = rows
+
+    ordered = sorted(candidates, key=lambda row: float(row["miou"]))
     failures = ordered[:count_per_group]
     successes = list(reversed(ordered[-count_per_group:]))
     return successes + failures
@@ -127,6 +138,10 @@ def write_selection(path: Path, selected: list[dict[str, Any]], figure_path: Pat
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         "figure": str(figure_path),
+        "selection_rule": (
+            "Top rows are highest-mIoU samples and bottom rows are lowest-mIoU samples, "
+            "restricted to targets containing both foreground and background when possible."
+        ),
         "selection": [
             {
                 "dataset_index": row["dataset_index"],
@@ -155,7 +170,7 @@ def write_analysis(path: Path, selected: list[dict[str, Any]], figure_path: Path
         "",
         "The global test metrics are high, and the high-mIoU examples show that the model generally captures the pet foreground rather than collapsing to all-background or all-foreground predictions.",
         "",
-        "The lowest-mIoU samples indicate failure modes that should be discussed in the report:",
+        "The lowest-mIoU samples are selected from targets containing both foreground and background where possible. They indicate failure modes that should be discussed in the report:",
     ]
     for row in failures:
         lines.append(

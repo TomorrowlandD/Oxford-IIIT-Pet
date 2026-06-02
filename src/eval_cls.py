@@ -279,7 +279,7 @@ def plot_confusion_matrix(
     title: str,
 ) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    fig, ax = plt.subplots(figsize=(13, 11), dpi=180)
+    fig, ax = plt.subplots(figsize=(11, 10), dpi=180)
     im = ax.imshow(matrix, interpolation="nearest", cmap="Blues")
     fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
 
@@ -299,9 +299,7 @@ def plot_confusion_matrix(
             color = "white" if value > threshold else "black"
             ax.text(j, i, str(value), ha="center", va="center", fontsize=4.5, color=color)
 
-    legend_text = "\n".join(f"{idx}: {name}" for idx, name in enumerate(class_names))
-    fig.text(0.99, 0.5, legend_text, ha="right", va="center", fontsize=5.5)
-    fig.tight_layout(rect=[0.0, 0.0, 0.82, 1.0])
+    fig.tight_layout()
     fig.savefig(output_path)
     plt.close(fig)
 

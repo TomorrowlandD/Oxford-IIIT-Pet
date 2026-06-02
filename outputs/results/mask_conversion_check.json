@@ -24,8 +24,8 @@
     {
       "split": "trainval",
       "index": 327,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Birman_125.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Birman_125.png",
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\Birman_125.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\Birman_125.png",
       "raw_trimap_values": [
         1,
         2,
@@ -45,8 +45,8 @@
     {
       "split": "trainval",
       "index": 1593,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\shiba_inu_144.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\shiba_inu_144.png",
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\shiba_inu_144.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\shiba_inu_144.png",
       "raw_trimap_values": [
         1,
         2,
@@ -66,8 +66,8 @@
     {
       "split": "trainval",
       "index": 1614,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Siamese_122.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Siamese_122.png",
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\Siamese_122.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\Siamese_122.png",
       "raw_trimap_values": [
         1,
         2,
@@ -87,8 +87,8 @@
     {
       "split": "trainval",
       "index": 2406,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Egyptian_Mau_161.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Egyptian_Mau_161.png",
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\Egyptian_Mau_161.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\Egyptian_Mau_161.png",
       "raw_trimap_values": [
         1,
         2,
@@ -108,8 +108,8 @@
     {
       "split": "trainval",
       "index": 2845,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Maine_Coon_167.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Maine_Coon_167.png",
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\Maine_Coon_167.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\Maine_Coon_167.png",
       "raw_trimap_values": [
         1,
         2,
@@ -129,8 +129,8 @@
     {
       "split": "trainval",
       "index": 3159,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Ragdoll_182.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Ragdoll_182.png",
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\Ragdoll_182.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\Ragdoll_182.png",
       "raw_trimap_values": [
         1,
         2,
@@ -150,8 +150,8 @@
     {
       "split": "test",
       "index": 73,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Abyssinian_77.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Abyssinian_77.png",
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\Abyssinian_77.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\Abyssinian_77.png",
       "raw_trimap_values": [
         1,
         2,
@@ -171,8 +171,8 @@
     {
       "split": "test",
       "index": 160,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\american_bulldog_65.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\american_bulldog_65.png",
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\american_bulldog_65.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\american_bulldog_65.png",
       "raw_trimap_values": [
         1,
         2,
@@ -192,8 +192,8 @@
     {
       "split": "test",
       "index": 1471,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\german_shorthaired_90.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\german_shorthaired_90.png",
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\german_shorthaired_90.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\german_shorthaired_90.png",
       "raw_trimap_values": [
         1,
         2,
@@ -213,8 +213,8 @@
     {
       "split": "test",
       "index": 1851,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\keeshond_73.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\keeshond_73.png",
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\keeshond_73.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\keeshond_73.png",
       "raw_trimap_values": [
         1,
         2,
@@ -234,8 +234,8 @@
     {
       "split": "test",
       "index": 2116,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\miniature_pinscher_41.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\miniature_pinscher_41.png",
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\miniature_pinscher_41.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\miniature_pinscher_41.png",
       "raw_trimap_values": [
         1,
         2,
@@ -255,8 +255,8 @@
     {
       "split": "test",
       "index": 2390,
-      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\pomeranian_19.jpg",
-      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\pomeranian_19.png",
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\pomeranian_19.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\pomeranian_19.png",
       "raw_trimap_values": [
         1,
         2,
