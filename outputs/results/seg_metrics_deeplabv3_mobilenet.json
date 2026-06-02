@@ -1,0 +1,43 @@
+{
+  "dataset": "Oxford-IIIT Pet",
+  "task": "binary pet foreground segmentation",
+  "model": "deeplabv3_mobilenet",
+  "split": "test",
+  "data_root": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data",
+  "checkpoint_path": "outputs\\checkpoints\\best_seg_deeplabv3_mobilenet.pth",
+  "checkpoint_epoch": 23,
+  "checkpoint_val_loss": 0.22604072231637395,
+  "checkpoint_val_pixel_accuracy": 0.9630944956903872,
+  "checkpoint_val_background_iou": 0.9390764594611881,
+  "checkpoint_val_foreground_iou": 0.9143997773080401,
+  "checkpoint_val_miou": 0.9267381183846142,
+  "checkpoint_val_dice": 0.9552861300410681,
+  "img_size": 320,
+  "batch_size": 4,
+  "seed": 42,
+  "val_ratio": 0.2,
+  "num_classes": 2,
+  "num_samples": 3669,
+  "mask_rule": {
+    "name": "scheme_b_merge_border_into_foreground",
+    "mapping": {
+      "1": 1,
+      "2": 0,
+      "3": 1
+    },
+    "ignore_index": null
+  },
+  "loss": 0.11648678431136629,
+  "pixel_accuracy": 0.9619810005493663,
+  "background_iou": 0.9366297788959085,
+  "foreground_iou": 0.9132121929607252,
+  "miou": 0.9249209859283168,
+  "dice": 0.9546376469068132,
+  "valid_pixels": 375705600,
+  "background_intersection": 211120833,
+  "foreground_intersection": 150300816,
+  "background_union": 225404784,
+  "foreground_union": 164584767,
+  "foreground_pred_pixels": 156033249,
+  "foreground_target_pixels": 158852334
+}

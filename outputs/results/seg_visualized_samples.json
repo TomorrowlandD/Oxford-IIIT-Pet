@@ -1,0 +1,65 @@
+{
+  "figure": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\outputs\\figures\\fig_seg_predictions.png",
+  "selection": [
+    {
+      "dataset_index": 394,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\basset_hound_97.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\basset_hound_97.png",
+      "pixel_accuracy": 0.991845703125,
+      "background_iou": 0.9829706524177595,
+      "foreground_iou": 0.9845946644035275,
+      "miou": 0.9837826584106435,
+      "dice": 0.9922375405553645
+    },
+    {
+      "dataset_index": 2534,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\pug_57.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\pug_57.png",
+      "pixel_accuracy": 0.990849609375,
+      "background_iou": 0.9850940964986239,
+      "foreground_iou": 0.9768504792963731,
+      "miou": 0.9809722878974985,
+      "dice": 0.9882896956820596
+    },
+    {
+      "dataset_index": 1478,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\german_shorthaired_97.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\german_shorthaired_97.png",
+      "pixel_accuracy": 0.990419921875,
+      "background_iou": 0.9823380083898962,
+      "foreground_iou": 0.9794932898532548,
+      "miou": 0.9809156491215755,
+      "dice": 0.98964042452083
+    },
+    {
+      "dataset_index": 2292,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\Persian_259.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\Persian_259.png",
+      "pixel_accuracy": 0.0,
+      "background_iou": 0.0,
+      "foreground_iou": 0.0,
+      "miou": 0.0,
+      "dice": 0.0
+    },
+    {
+      "dataset_index": 1858,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\keeshond_7.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\keeshond_7.png",
+      "pixel_accuracy": 0.01625,
+      "background_iou": 0.01625,
+      "foreground_iou": 0.0,
+      "miou": 0.008125,
+      "dice": 0.0
+    },
+    {
+      "dataset_index": 2005,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\images\\Maine_Coon_268.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\step6_data\\oxford-iiit-pet\\annotations\\trimaps\\Maine_Coon_268.png",
+      "pixel_accuracy": 0.03779296875,
+      "background_iou": 0.0,
+      "foreground_iou": 0.03779296875,
+      "miou": 0.018896484375,
+      "dice": 0.07283334901665568
+    }
+  ]
+}

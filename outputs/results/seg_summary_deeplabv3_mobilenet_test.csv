@@ -1,0 +1,2 @@
+model,split,checkpoint_epoch,num_samples,img_size,pixel_accuracy,background_iou,foreground_iou,miou,dice,loss
+deeplabv3_mobilenet,test,23,3669,320,0.9619810005493663,0.9366297788959085,0.9132121929607252,0.9249209859283168,0.9546376469068132,0.11648678431136629
