@@ -50,6 +50,7 @@
 \hypersetup{
   bookmarksnumbered=true,
   bookmarksopen=true,
+  linktoc=all,
   pdfstartview=FitH
 }
 
@@ -76,11 +77,20 @@
 % 一级标题编号：一、二、三
 \renewcommand{\thesection}{\chinese{section}}
 
-% 二级标题编号：1. 2. 3.
-\renewcommand{\thesubsection}{\arabic{subsection}}
+% 二级标题编号：3.1、3.2
+\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
 
-% 三级标题编号：（1）（2）（3）
-\renewcommand{\thesubsubsection}{（\arabic{subsubsection}）}
+% 三级标题编号：3.1.1、3.1.2
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+
+% PDF 超链接锚点编号：使用阿拉伯数字，保证目录跳转稳定
+\renewcommand{\theHsection}{\arabic{section}}
+\renewcommand{\theHsubsection}{\arabic{section}.\arabic{subsection}}
+\renewcommand{\theHsubsubsection}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}
+
+% 目录与编号深度：显示到三级标题，并让目录条目可由 hyperref 跳转
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
 
 % =========================
 % 标题格式设置
@@ -95,15 +105,15 @@
   {}
 
 % 二级标题：黑体，四号，加粗，左对齐
-% 效果：1. 概述
+% 效果：3.1 实验方法
 \titleformat{\subsection}
   {\heiti\zihao{4}\raggedright}
-  {\thesubsection.}
+  {\thesubsection}
   {0.5em}
   {}
 
 % 三级标题：黑体，小四，加粗，左对齐
-% 效果：（1）数据预处理
+% 效果：3.1.1 数据划分方法
 \titleformat{\subsubsection}
   {\heiti\zihao{-4}\raggedright}
   {\thesubsubsection}
@@ -119,6 +129,15 @@
 
 \titlespacing*{\subsubsection}
   {0pt}{0.5em}{0.2em}
+
+% =========================
+% 目录层级格式设置
+% =========================
+% 让二级、三级标题在目录中有明确缩进，避免 2.2 与 2.2.1 看起来混在同一层。
+\makeatletter
+\renewcommand*\l@subsection{\@dottedtocline{2}{2.0em}{3.0em}}
+\renewcommand*\l@subsubsection{\@dottedtocline{3}{4.4em}{4.0em}}
+\makeatother
 
 % =========================
 % 页脚页码设置
@@ -164,75 +183,101 @@
 
 \section{实验目的及内容}
 
-本实验围绕 Oxford-IIIT Pet 数据集完成宠物品种分类与宠物前景语义分割两个任务。分类任务以 37 类宠物品种识别为目标，使用 ResNet18 作为 baseline，使用 EfficientNet-B0 作为主分类模型；分割任务以宠物前景和背景二分类为目标，使用 DeepLabV3-MobileNetV3 作为主分割模型。
+\begingroup
+\setlength{\parindent}{0pt}
+上机3  计算机视觉综合实践
 
-实验内容包括数据读取与固定划分、图像预处理与数据增强、trimap 标注转换、迁移学习模型构建、分类与分割模型训练、测试集指标评估、可视化结果生成以及模型对比分析。
+上机目的： 通过上机，掌握计算机视觉综合实践应用。
 
-\subsection{实验任务}
+上机内容： 任选本课程所讲的计算机视觉，不限数据集和技术内容，尽量使用多种技术进行实践。建议包含数据预处理、模型微调、评估与可视化。
 
-\begin{itemize}
-  \item 分类任务：输入宠物图像，输出 37 类宠物品种标签。
-  \item 分割任务：输入宠物图像，输出宠物前景与背景的二值语义分割 mask。
-  \item 对比实验：复用 ResNet18 和 EfficientNet-B0 的分类结果，完成轻量消融分析。
-\end{itemize}
-
-\subsection{交付目标}
-
-\begin{itemize}
-  \item 形成可复现的训练、评估和可视化脚本。
-  \item 保存模型权重、训练日志、指标文件和报告图片。
-  \item 基于真实实验输出撰写完整实验报告，并使用 \texttt{xelatex} 编译生成 PDF。
-\end{itemize}
+要求：完成自选内容的模型的训练和评估，运行出正确的结果。上传源代码和上机报告电子版，并双面打印上机报告纸质版，作为期末课程报告。
+\endgroup
 
 \section{实验原理及技术路线}
+\label{sec:principle-route}
 
 \subsection{概述}
+\label{sec:principle-overview}
 
-本实验采用迁移学习方法解决中等规模宠物图像分类问题，并采用语义分割模型完成像素级前景提取。整体流程从数据集读取开始，经过预处理、模型训练和测试评估，最终将指标和可视化结果整理进实验报告。
+本实验以 Oxford-IIIT Pet 数据集为实验对象，围绕宠物品种分类和宠物前景语义分割两个任务展开。分类任务要求模型根据输入图像判断宠物所属的品种类别，共包含 37 类猫狗品种；分割任务要求模型在像素级别区分宠物前景和图像背景，从而得到宠物主体区域的二分类分割结果。通过这两个任务，可以从图像级识别和像素级理解两个角度，进一步掌握卷积神经网络在计算机视觉任务中的基本应用流程。
 
-\subsection{图像分类原理}
+本实验整体采用迁移学习思想。由于 Oxford-IIIT Pet 数据集规模相对有限，如果完全从零开始训练深层神经网络，模型可能会出现收敛较慢、泛化能力不足等问题。因此，本实验优先使用在大规模图像数据集上预训练的模型作为基础，再根据宠物分类和前景分割任务修改输出层并进行微调。分类任务中，使用 ResNet18 作为 baseline，使用 EfficientNet-B0 作为主要分类模型；分割任务中，使用 DeepLabV3-MobileNetV3 作为主要语义分割模型。
 
-图像分类模型将输入图像映射为类别概率分布。对于 37 类宠物品种分类，模型最后一层输出维度为 37，预测类别由最大 logit 或最大 softmax 概率确定。
+本实验流程主要包括数据读取、固定划分、图像预处理、模型构建、模型训练、测试集评估和结果可视化。分类任务使用 Accuracy、Macro-F1、Weighted-F1 和 Top-5 Accuracy 等指标评价模型识别性能；分割任务使用 Pixel Accuracy、IoU、mIoU 和 Dice 等指标评价像素级预测效果。最后结合训练曲线、混淆矩阵、分类样例和分割可视化结果，对实验结果进行整理和分析。
 
-\subsection{交叉熵损失}
+\subsection{实验原理}
+\label{sec:principle-theory}
 
-分类和分割训练均使用交叉熵损失。分类任务中，交叉熵用于度量预测类别分布与真实类别标签之间的差异：
+\subsubsection{图像分类原理}
+\label{sec:principle-classification}
+
+图像分类是计算机视觉中的基础任务，其目标是根据输入图像预测其所属类别。对于本实验中的宠物品种分类任务，输入为一张宠物图像，输出为 37 个宠物品种类别中的一个类别。分类模型通常由特征提取部分和分类输出部分组成。特征提取部分通过卷积、非线性激活、池化等操作提取图像中的边缘、纹理、颜色、形状以及高层语义特征；分类输出部分则将提取到的特征映射为各类别的预测得分。
+
+在神经网络分类模型中，最后一层通常输出一组 logits，其维度等于类别数量。本实验的分类任务共有 37 个类别，因此 ResNet18 和 EfficientNet-B0 的最终分类层均被修改为 37 维输出。模型输出经过 softmax 后可以得到各类别的预测概率，概率最大的类别即为模型的预测结果。对于宠物品种分类而言，不同类别之间可能具有相似的毛色、体型和姿态，因此模型不仅要学习整体轮廓，还需要关注面部结构、耳朵形状、毛发纹理等较细致的视觉特征。
+
+\subsubsection{迁移学习与预训练模型}
+\label{sec:principle-transfer-learning}
+
+迁移学习是指将一个任务中学习到的知识迁移到另一个相关任务中使用。在深度学习图像任务中，常见做法是使用在 ImageNet 等大规模数据集上预训练的模型作为初始化，然后在目标数据集上继续训练。预训练模型已经学习到较通用的低层视觉特征和部分高层语义特征，因此在目标数据集规模较小时，迁移学习可以减少训练难度，加快模型收敛，并在一定程度上提升模型的泛化能力。
+
+本实验分类部分使用 ResNet18 和 EfficientNet-B0。ResNet18 通过残差连接缓解深层网络训练过程中的梯度退化问题，使网络能够更稳定地学习图像特征。由于 ResNet18 结构清晰、训练速度较快，本实验将其作为分类 baseline。EfficientNet-B0 通过复合缩放思想同时平衡网络深度、宽度和输入分辨率，在参数规模较小的情况下仍具有较好的特征表达能力，因此作为本实验的主要分类模型。
+
+在模型修改方面，两个分类模型均加载 ImageNet 预训练权重，并将原始分类层替换为适用于 37 类宠物品种分类的新输出层。训练过程中，模型在保留预训练视觉特征的基础上，根据 Oxford-IIIT Pet 数据集进一步调整参数，使其更适合宠物品种识别任务。
+
+\subsubsection{语义分割与前景 mask}
+\label{sec:principle-segmentation}
+
+语义分割是像素级视觉理解任务，其目标是为图像中的每个像素预测类别标签。与图像分类只输出整张图像的类别不同，语义分割需要输出与输入图像空间位置对应的预测结果，因此更关注物体边界、局部区域和空间结构信息。在本实验中，分割任务的重点不是判断宠物品种，而是从图像中提取宠物主体区域。
+
+本实验的分割任务为宠物前景二分类语义分割，即将图像中的每个像素划分为背景或宠物前景。Oxford-IIIT Pet 数据集提供 trimap 标注，原始标注中包含宠物主体、边界区域和背景区域。为了使任务更加聚焦，本实验将原始 trimap 转换为二值 mask：背景像素映射为 0，宠物主体和边界区域统一映射为前景 1。经过该转换后，分割模型只需要输出背景和宠物前景两个类别。
+
+分割模型使用 DeepLabV3-MobileNetV3。DeepLabV3 通过空洞卷积扩大感受野，并结合多尺度上下文信息提升语义分割能力；MobileNetV3 作为轻量化 backbone，可以在保证一定特征表达能力的同时降低计算量。对于本实验的宠物前景提取任务，该模型既能完成像素级预测，又能控制训练和推理的计算成本，适合课程实验环境使用。
+
+在分割任务的数据处理过程中，需要保证图像和 mask 的空间变换保持一致。例如，对图像和 mask 进行缩放、裁剪或翻转时，二者必须同步变化，否则会导致像素标签与图像内容错位。同时，mask 本身是离散类别标签，因此在调整 mask 尺寸时应使用最近邻插值，避免产生不属于任何类别的非法像素值。
+
+\subsubsection{损失函数与评价指标}
+\label{sec:principle-loss-metrics}
+
+本实验的分类任务和分割任务均使用交叉熵损失进行训练。分类任务中，交叉熵损失用于度量模型预测类别分布与真实类别标签之间的差异。设一个 batch 中共有 $N$ 个样本，第 $i$ 个样本真实类别为 $y_i$，模型对该真实类别预测的概率为 $p_{i,y_i}$，则分类交叉熵损失可表示为：
 
 \[
-\mathcal{L}_{cls} = -\frac{1}{N}\sum_{i=1}^{N}\log p_{i,y_i}
+\mathcal{L}_{cls}=-\frac{1}{N}\sum_{i=1}^{N}\log p_{i,y_i}
 \]
 
-\subsection{迁移学习}
+分割任务中，交叉熵损失在像素级别计算。模型需要对每个像素预测其属于背景或宠物前景的概率，损失函数则衡量每个像素预测结果与真实 mask 标签之间的差异。通过最小化像素级交叉熵，模型逐渐学习宠物主体区域与背景区域之间的边界和语义差异。
 
-ResNet18 和 EfficientNet-B0 均加载 ImageNet 预训练权重，并将最后分类层替换为 37 类输出层。预训练特征能够加快收敛，并提升小规模训练数据上的泛化能力。
+分类任务的评价指标包括 Accuracy、Macro-F1、Weighted-F1 和 Top-5 Accuracy。Accuracy 表示整体分类正确率，能够反映模型在全部测试样本上的总体表现；Macro-F1 对每个类别的 F1 值进行平均，可以反映不同类别上的平均识别能力，适合观察类别间表现是否均衡；Weighted-F1 按类别样本数加权，更接近整体样本分布下的综合表现；Top-5 Accuracy 则用于衡量真实类别是否出现在模型预测概率最高的前 5 个类别中。
 
-\subsection{语义分割原理}
-
-语义分割模型为每个像素预测类别。本实验将 Oxford-IIIT Pet 的三值 trimap 转换为二值 mask，模型输出为背景和宠物前景两类。像素级预测结果使用 Pixel Accuracy、IoU、mIoU 和 Dice 进行评估。
-
-\subsection{DeepLabV3-MobileNetV3}
-
-DeepLabV3 通过空洞卷积和多尺度上下文建模提升分割能力，MobileNetV3 作为轻量级 backbone 可以降低计算量。本实验将 DeepLabV3-MobileNetV3 的输出头修改为 2 类，用于宠物前景分割。
+分割任务的评价指标包括 Pixel Accuracy、IoU、mIoU 和 Dice。Pixel Accuracy 表示所有像素中预测正确的比例；IoU 表示预测区域与真实区域的交集和并集之比，可用于衡量某一类别区域的重合程度；mIoU 是各类别 IoU 的平均值，是语义分割任务中常用的综合指标；Dice 系数同样用于衡量预测前景与真实前景的重合程度，对前景区域分割效果具有较直观的解释意义。
 
 \subsection{技术路线}
+\label{sec:principle-technical-route}
+
+本实验的技术路线从数据集准备开始，依次完成数据处理、模型训练、模型评估和结果分析。整体来看，分类任务和分割任务共享 Oxford-IIIT Pet 数据集，但二者使用的标签形式和输出目标不同：分类任务使用宠物品种标签，输出图像级类别；分割任务使用 trimap 标注转换得到的二值 mask，输出像素级前景预测结果。
+
+实验首先通过 TorchVision 提供的 Oxford-IIIT Pet 数据集接口读取图像、分类标签和分割标注。为了保证实验结果可复现，使用固定随机种子对官方 trainval 部分进行训练集和验证集划分，并保留官方 test 部分作为最终测试集。随后，分类任务和分割任务分别构建对应的数据预处理流程。分类任务主要进行图像缩放、归一化和训练阶段的数据增强；分割任务则需要在图像预处理之外完成 trimap 到二值 mask 的转换，并保证图像与 mask 的空间对应关系。
+
+分类模型训练分为 baseline 和主模型两条路线。首先训练 ResNet18 baseline，用于建立基础对比结果；随后训练 EfficientNet-B0 主分类模型，并与 ResNet18 在相同数据划分和测试集条件下进行比较。两个模型均加载 ImageNet 预训练权重，并将分类输出层替换为 37 类。训练完成后，在测试集上计算分类指标，并生成混淆矩阵、正确分类样例和错误分类样例，用于后续结果分析。
+
+分割任务使用 DeepLabV3-MobileNetV3 完成宠物前景预测。模型输出背景和宠物前景两个类别，训练过程中使用二值前景 mask 作为监督信号。模型训练完成后，在测试集上计算 Pixel Accuracy、IoU、mIoU 和 Dice 等指标，并生成原始图像、真实 mask 和预测 mask 的对比图，用于观察模型对宠物主体、边界区域和复杂背景的处理效果。
+
+整体技术路线如图 \ref{fig:pipeline} 所示。该流程图将实验分为分类任务和分割任务两条路线：分类路线主要完成图像预处理、分类模型训练和分类指标评估；分割路线主要完成 trimap 转换、前景分割模型训练和分割指标评估。两条路线最终汇总为实验结果分析和报告撰写材料。
 
 \begin{figure}[H]
 \centering
-\fbox{\parbox{0.9\textwidth}{
-\centering
-数据读取与固定划分 $\rightarrow$ 图像预处理与增强 $\rightarrow$ trimap 转二值 mask \\
-$\rightarrow$ 分类模型训练 $\rightarrow$ 分割模型训练 $\rightarrow$ 测试集评估 \\
-$\rightarrow$ 可视化生成 $\rightarrow$ 结果分析与报告撰写
-}}
-\caption{实验技术路线}
+\includegraphics[width=0.95\textwidth,height=0.72\textheight,keepaspectratio]{outputs/figures/technical_route_exact.png}
+\caption{实验技术路线图}
 \label{fig:pipeline}
 \end{figure}
+
+综上，本实验的技术路线以 Oxford-IIIT Pet 数据集为基础，将宠物品种分类和宠物前景分割作为两个相互关联的视觉任务展开。分类任务侧重图像级语义识别，分割任务侧重像素级区域理解；二者共同构成从数据处理、模型训练、指标评估到可视化分析的完整实验流程。
 
 \section{所用仪器、材料}
 
 \subsection{实验环境}
 
-表 \ref{tab:environment} 记录本次实验的主要运行环境。模型训练和评估均在同一 Python 环境下完成，报告使用 \texttt{xelatex} 编译。
+本实验在本地计算机和远程服务器上共同完成。实验代码的调试、结果整理和报告材料生成主要在 Windows 本地环境中完成；模型训练和部分计算量较大的实验主要在远程服务器上完成。训练、评估和可视化程序均使用 Python 编写，深度学习模型基于 PyTorch 框架实现，并通过 CUDA 调用 GPU 进行加速。主要实验环境如表 \ref{tab:environment} 所示。
 
 \begin{table}[H]
 \centering
@@ -242,20 +287,43 @@ $\rightarrow$ 可视化生成 $\rightarrow$ 结果分析与报告撰写
 \toprule
 项目 & 配置 \\
 \midrule
-操作系统 & Windows \\
-Python 环境 & \texttt{D:\textbackslash Anaconda3\textbackslash envs\textbackslash unet} \\
+本地操作系统 & Windows \\
+本地 Python 环境 & conda 环境 \texttt{unet} \\
+本地 Python 路径 & \texttt{D:\textbackslash Anaconda3\textbackslash envs\textbackslash unet\textbackslash python.exe} \\
 Python 版本 & Python 3.10.20 \\
-PyTorch / TorchVision & PyTorch 2.11.0+cu126 / TorchVision 0.26.0+cu126 \\
-CUDA / GPU & CUDA 12.6，NVIDIA GeForce RTX 4060 Laptop GPU \\
-主要依赖库 & NumPy 1.23.5，Matplotlib 3.6.2，scikit-learn 1.7.2，pandas 2.3.3 \\
-报告编译 & MiKTeX-XeTeX 4.18，MiKTeX 26.5 \\
+本地 GPU & NVIDIA GeForce RTX 4060 Laptop GPU \\
+远程服务器 GPU & NVIDIA GeForce RTX 4090 24GB \\
+CUDA & CUDA 12.6 \\
+深度学习框架 & PyTorch 2.11.0+cu126 \\
+视觉工具库 & TorchVision 0.26.0+cu126 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{数据集}
 
-本实验使用 Oxford-IIIT Pet 数据集。数据集包含 37 类宠物品种图像，并提供用于前景分割的 trimap 标注。分类任务读取 \texttt{target\_types="category"}，分割任务读取 \texttt{target\_types="segmentation"}。官方 \texttt{trainval} split 按固定随机种子划分为训练集和验证集，官方 \texttt{test} split 仅用于最终评估，不参与训练和模型选择。
+本实验使用 Oxford-IIIT Pet 数据集作为主要实验数据。该数据集包含猫和犬的宠物图像，共有 37 个宠物品种类别，并同时提供图像分类标签和语义分割 trimap 标注。在分类任务中，模型以宠物图像作为输入，输出对应的 37 类宠物品种标签；在分割任务中，本实验将原始 trimap 标注转换为二值 mask，其中背景记为 0，宠物前景记为 1，用于训练宠物前景二分类语义分割模型。
+
+\begin{table}[H]
+\centering
+\caption{实验数据}
+\label{tab:dataset-info}
+\begin{tabular}{p{0.28\textwidth}p{0.62\textwidth}}
+\toprule
+项目 & 内容 \\
+\midrule
+数据集名称 & Oxford-IIIT Pet \\
+数据目录 & \texttt{data/step6\_data/oxford-iiit-pet} \\
+类别数量 & 37 类 \\
+分类标注 & 宠物品种类别标签 \\
+分割标注 & trimap 标注 \\
+分割任务设置 & 背景/宠物前景二分类 \\
+随机种子 & 42 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+数据划分情况如表 \ref{tab:data-split} 所示。官方 \texttt{trainval} 部分按照固定随机种子 42 划分为训练集和验证集，官方 \texttt{test} 部分只用于最终测试评估，不参与模型训练和模型选择。
 
 \begin{table}[H]
 \centering
@@ -274,212 +342,352 @@ test & 3669 & 最终测试评估 \\
 
 \subsection{主要软件库}
 
-\begin{itemize}
-  \item PyTorch / TorchVision：模型构建、训练、预训练权重加载和数据集读取。
-  \item NumPy / pandas：数据统计、日志保存和指标文件整理。
-  \item scikit-learn：Accuracy、Macro-F1、每类指标和混淆矩阵计算。
-  \item Matplotlib：数据样例、类别分布、训练曲线、混淆矩阵和预测结果可视化。
-\end{itemize}
+本实验主要使用 PyTorch 和 TorchVision 完成模型构建、数据读取、迁移学习和训练评估。数据统计、指标计算和结果可视化过程使用 NumPy、pandas、scikit-learn 和 Matplotlib 完成。主要软件库及用途如表 \ref{tab:software-libs} 所示。
+
+\begin{table}[H]
+\centering
+\caption{主要软件库}
+\label{tab:software-libs}
+\begin{tabular}{p{0.23\textwidth}p{0.22\textwidth}p{0.45\textwidth}}
+\toprule
+软件或库 & 版本 & 主要用途 \\
+\midrule
+PyTorch & 2.11.0+cu126 & 模型构建、训练、损失计算和 GPU 加速 \\
+TorchVision & 0.26.0+cu126 & 数据集读取、图像变换、预训练模型加载 \\
+NumPy & 1.23.5 & 数值计算和数组处理 \\
+pandas & 2.3.3 & 训练日志、预测结果和指标表格保存 \\
+scikit-learn & 1.7.2 & 分类指标、Macro-F1 和混淆矩阵计算 \\
+Matplotlib & 3.6.2 & 训练曲线、类别分布、混淆矩阵和分割结果可视化 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{模型资源与输出材料}
+
+本实验使用的模型均基于 PyTorch/TorchVision 实现。分类任务中，ResNet18 作为基础对比模型，EfficientNet-B0 作为主要分类模型，两者均使用 ImageNet 预训练权重进行迁移学习；分割任务中，使用 DeepLabV3-MobileNetV3 完成宠物前景提取。
+
+\begin{table}[H]
+\centering
+\caption{实验模型资源}
+\label{tab:model-resources}
+\begin{tabular}{p{0.22\textwidth}p{0.3\textwidth}p{0.38\textwidth}}
+\toprule
+任务 & 模型 & 用途 \\
+\midrule
+图像分类 & ResNet18 & 37 类宠物品种分类基础对比模型 \\
+图像分类 & EfficientNet-B0 & 37 类宠物品种分类主模型 \\
+语义分割 & DeepLabV3-MobileNetV3 & 宠物前景二分类语义分割主模型 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+实验过程中生成的训练日志、指标文件、可视化图片和模型权重统一保存在 \texttt{outputs/} 目录下，便于实验过程复核和报告材料整理。其中，模型权重属于训练过程中产生的中间文件，主要用于后续评估和复现实验指标；由于权重文件体积较大，最终项目打包提交时不包含模型权重文件。
+
+\begin{table}[H]
+\centering
+\caption{实验输出材料}
+\label{tab:output-materials}
+\begin{tabular}{p{0.3\textwidth}p{0.6\textwidth}}
+\toprule
+输出目录 & 保存内容 \\
+\midrule
+\texttt{outputs/checkpoints/} & 分类模型和分割模型的最佳权重，作为训练中间文件使用，最终打包提交时不包含该目录中的权重文件 \\
+\texttt{outputs/logs/} & 训练过程日志 CSV 文件 \\
+\texttt{outputs/figures/} & 数据样例、训练曲线、混淆矩阵、分割可视化图片 \\
+\texttt{outputs/results/} & 测试指标、预测结果、数据划分记录和分析文件 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+综上，本实验在本地计算机与远程服务器相结合的环境下完成，并在 GPU 加速条件下开展 Oxford-IIIT Pet 数据集上的宠物品种分类和宠物前景语义分割实验。实验使用的数据、日志、指标文件和可视化图片均在项目目录中保存，可用于实验报告撰写和结果复查。
 
 \section{实验方法、步骤}
 
+本实验围绕 Oxford-IIIT Pet 数据集完成宠物品种分类和宠物前景语义分割两个任务。分类任务要求模型根据输入图像判断宠物所属的 37 个品种类别；分割任务要求模型将图像中的宠物主体从背景中区分出来，得到前景和背景二分类 mask。实验整体流程包括数据读取与固定划分、图像预处理、模型构建、模型训练、测试集评估、可视化结果生成和报告材料整理。
+
 \subsection{实验方法}
 
-本实验采用“分类 + 分割”的综合计算机视觉流程。分类任务用于识别 37 类宠物品种，分割任务用于从图像中提取宠物前景区域。两个任务共享同一数据集和固定划分方式，但分别使用适合任务目标的数据预处理、模型结构和评价指标。
+本实验采用“分类模型对比 + 前景语义分割”的综合实验方案。分类部分使用 ResNet18 作为 baseline，使用 EfficientNet-B0 作为主分类模型；分割部分使用 DeepLabV3-MobileNetV3 作为主分割模型。模型构建、训练和评估均基于 PyTorch 和 TorchVision 完成，并在数据划分和训练过程中设置固定随机种子，以提高实验结果的可复现性。
 
 \subsubsection{数据划分方法}
 
-使用 TorchVision 的 \texttt{OxfordIIITPet} 数据集接口读取图像、分类标签和分割 trimap。官方 \texttt{trainval} split 按固定随机种子 42 划分为训练集和验证集，官方 \texttt{test} split 保持为最终测试集。划分索引保存为 \texttt{outputs/results/split\_indices\_seed42.json}，保证多次运行使用相同样本划分。数据读取阶段同步统计类别数量、每个 split 的样本数、训练集类别分布以及 trimap 像素值。
+本实验通过 TorchVision 提供的 \texttt{OxfordIIITPet} 接口读取数据集。分类任务读取 \texttt{target\_types="category"}，获得 37 类宠物品种标签；分割任务读取 \texttt{target\_types="segmentation"}，获得数据集提供的 trimap 标注。
+
+Oxford-IIIT Pet 数据集自带 \texttt{trainval} 和 \texttt{test} 两个官方划分。本实验没有直接将 \texttt{trainval} 全部用于训练，而是使用固定随机种子 42 将其进一步划分为训练集和验证集，其中验证集用于训练过程监控和模型选择。官方 \texttt{test} split 保持独立，只在最终评估阶段使用，不参与训练和调参。这样可以保证测试结果具有相对客观的评价意义。
+
+数据划分逻辑由 \texttt{src/data\_loaders.py} 实现。代码中使用固定种子的 \texttt{torch.Generator} 对官方 \texttt{trainval} 索引进行随机划分，关键代码如下：
+
+\begin{lstlisting}[language=Python,caption={固定训练集和验证集划分代码}]
+def make_train_val_indices(length: int, val_ratio: float = 0.2, seed: int = SEED):
+    val_size = int(round(length * val_ratio))
+    train_size = length - val_size
+    generator = torch.Generator().manual_seed(seed)
+    train_subset, val_subset = torch.utils.data.random_split(
+        range(length), [train_size, val_size], generator=generator
+    )
+    return list(train_subset.indices), list(val_subset.indices)
+\end{lstlisting}
+
+划分后的索引保存到 \texttt{outputs/results/split\_indices\_seed42.json}。后续训练、评估和报告复查均可依据该文件使用同一组训练集、验证集和测试集样本。
 
 \subsubsection{图像预处理与 mask 转换方法}
 
-分类输入尺寸为 $224\times224$，使用 ImageNet mean/std 归一化。训练集使用轻量随机增强，验证集和测试集使用确定性预处理。分割输入尺寸为 $320\times320$，图像使用双线性插值 resize，mask 使用最近邻插值 resize，并保证随机裁剪和水平翻转对图像与 mask 同步生效。
+分类任务和分割任务的输入形式不同，因此本实验分别设计了对应的预处理方式。分类模型输入尺寸设为 $224\times224$，训练集使用随机裁剪、随机水平翻转和颜色扰动等轻量增强，验证集和测试集使用 resize、center crop 和 ImageNet mean/std 归一化。这样既可以增加训练样本的变化，也可以保证验证和测试阶段输入形式稳定。
 
-\begin{table}[H]
-\centering
-\caption{图像预处理与增强配置}
-\label{tab:preprocess-config}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{lll}
-\toprule
-任务 & split & 预处理与增强 \\
-\midrule
-分类 & train & RandomResizedCrop(224, scale=0.75--1.0, ratio=0.85--1.15)，RandomHorizontalFlip(0.5)，ColorJitter，Normalize \\
-分类 & val/test & Resize(256)，CenterCrop(224)，Normalize \\
-分割 & train & 同步 RandomResizedCrop(320, scale=0.85--1.0, ratio=0.9--1.1)，同步 RandomHorizontalFlip(0.5)，Normalize \\
-分割 & val/test & 图像双线性 Resize(320)，mask 最近邻 Resize(320)，Normalize 图像但不归一化 mask \\
-\bottomrule
-\end{tabular}
-}
-\end{table}
+分割任务输入尺寸设为 $320\times320$。由于分割 mask 表示离散类别标签，图像 resize 使用双线性插值，而 mask resize 使用最近邻插值，避免插值过程中产生 0、1、2、3 之外的非法类别值。训练阶段的随机裁剪和水平翻转同时作用在图像和 mask 上，从而保证像素级标签与图像内容保持一致。
 
-原始 trimap 像素值含义为：1 表示宠物主体，2 表示背景，3 表示边界。本实验采用边界并入前景的二值规则：原始值 1 和 3 映射为前景 1，原始值 2 映射为背景 0。该规则在数据变换、训练损失、评估指标和报告说明中保持一致，因此分割训练不使用 \texttt{ignore\_index}。
+Oxford-IIIT Pet 的原始 trimap 标注包含 3 类像素值。本实验将分割任务处理为宠物前景二分类问题，因此需要先将 trimap 转换为二值 mask。转换规则为：原始值 2 映射为背景 0，原始值 1 和 3 映射为前景 1。该规则由 \texttt{src/data\_transforms.py} 中的 \texttt{convert\_trimap\_to\_binary\_mask} 实现：
 
-\begin{table}[H]
-\centering
-\caption{trimap 到二值 mask 的转换规则}
-\label{tab:mask-rule}
-\begin{tabular}{ccc}
-\toprule
-原始 trimap 值 & 原始含义 & 二值 mask 值 \\
-\midrule
-1 & 宠物主体 & 1，前景 \\
-2 & 背景 & 0，背景 \\
-3 & 边界 & 1，前景 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\begin{lstlisting}[language=Python,caption={trimap 转二值 mask 代码}]
+def convert_trimap_to_binary_mask(mask):
+    if isinstance(mask, torch.Tensor):
+        invalid = ~((mask == 1) | (mask == 2) | (mask == 3))
+        if bool(invalid.any().item()):
+            values = sorted(int(value) for value in torch.unique(mask).tolist())
+            raise ValueError(f"Unexpected trimap values: {values}")
+        return torch.where(mask == 2, torch.zeros_like(mask), torch.ones_like(mask)).long()
+
+    mask_array = np.asarray(mask)
+    valid = np.isin(mask_array, [1, 2, 3])
+    if not bool(valid.all()):
+        values = sorted(int(value) for value in np.unique(mask_array).tolist())
+        raise ValueError(f"Unexpected trimap values: {values}")
+    return np.where(mask_array == 2, 0, 1).astype(np.int64)
+\end{lstlisting}
+
+该函数在转换前检查原始 mask 像素值是否合法，转换后输出只包含 0 和 1 两类标签。后续分割模型使用交叉熵损失进行二分类像素预测，不再单独设置忽略类别。
 
 \subsubsection{模型训练方法}
 
-分类任务使用迁移学习方法。ResNet18 作为 baseline，EfficientNet-B0 作为主分类模型，二者均加载 TorchVision 的 ImageNet 预训练权重，并将最后输出层替换为 37 类。训练采用全模型微调，损失函数为 \texttt{CrossEntropyLoss}，优化器为 AdamW。每个 epoch 记录 train loss、val loss、val accuracy、val macro-F1、学习率和耗时；最佳模型优先按验证集 Macro-F1 保存，若 Macro-F1 相同则按 Accuracy 作为次级判断。
+分类任务采用迁移学习方法。ResNet18 和 EfficientNet-B0 均通过 TorchVision 加载 ImageNet 预训练权重，并将最后输出层替换为 37 类输出。ResNet18 结构相对简单、训练速度较快，因此作为 baseline；EfficientNet-B0 在模型规模和特征表达能力之间较为均衡，因此作为本实验的主分类模型。
 
-\begin{table}[H]
-\centering
-\caption{分类训练配置}
-\label{tab:cls-config}
-\begin{tabular}{lcc}
-\toprule
-配置项 & ResNet18 & EfficientNet-B0 \\
-\midrule
-输入尺寸 & 224 & 224 \\
-类别数 & 37 & 37 \\
-batch size & 32 & 32 \\
-epoch & 20 & 25 \\
-学习率 & $1\times10^{-4}$ & $1\times10^{-4}$ \\
-优化器 & AdamW & AdamW \\
-weight decay & $1\times10^{-4}$ & $1\times10^{-4}$ \\
-损失函数 & CrossEntropyLoss & CrossEntropyLoss \\
-预训练权重 & ImageNet & ImageNet \\
-最佳模型选择 & 验证集 Macro-F1 & 验证集 Macro-F1 \\
-\bottomrule
-\end{tabular}
-\end{table}
+分类模型的构建逻辑集中在 \texttt{src/models\_cls.py}。对于 ResNet18，代码替换全连接层 \texttt{fc}；对于 EfficientNet-B0，代码替换 \texttt{classifier} 中最后一层线性层：
 
-分割任务使用 TorchVision 的 DeepLabV3-MobileNetV3-Large，并将主输出头和辅助输出头的最后一层卷积都修改为 2 类。训练时输入图像尺寸为 $320\times320$，标签为二值类别索引。模型输出为 \texttt{[B, 2, H, W]}，若输出空间尺寸与标签不一致，则先用双线性插值对 logits 对齐到标签尺寸，再计算损失和指标。训练损失由主输出交叉熵和辅助输出交叉熵组成，辅助损失权重为 0.4；最佳权重按验证集 mIoU 保存，Dice 作为并列情况下的次级指标。
+\begin{lstlisting}[language=Python,caption={分类模型输出层替换代码}]
+def build_resnet18(num_classes: int = NUM_CLASSES, pretrained: bool = True) -> nn.Module:
+    weights = ResNet18_Weights.DEFAULT if pretrained else None
+    model = resnet18(weights=weights)
+    model.fc = nn.Linear(model.fc.in_features, num_classes)
+    return model
 
-\begin{table}[H]
-\centering
-\caption{分割训练配置}
-\label{tab:seg-config}
-\begin{tabular}{ll}
-\toprule
-配置项 & DeepLabV3-MobileNetV3 \\
-\midrule
-输入尺寸 & 320 \\
-类别数 & 2 \\
-batch size & 4 \\
-epoch & 30 \\
-学习率 & $1\times10^{-4}$ \\
-优化器 & AdamW \\
-weight decay & $1\times10^{-4}$ \\
-损失函数 & CrossEntropyLoss \\
-辅助损失权重 & 0.4 \\
-预训练权重 & TorchVision DEFAULT \\
-最佳模型选择 & 验证集 mIoU \\
-\bottomrule
-\end{tabular}
-\end{table}
+
+def build_efficientnet_b0(num_classes: int = NUM_CLASSES, pretrained: bool = True) -> nn.Module:
+    weights = EfficientNet_B0_Weights.DEFAULT if pretrained else None
+    model = efficientnet_b0(weights=weights)
+    in_features = model.classifier[-1].in_features
+    model.classifier[-1] = nn.Linear(in_features, num_classes)
+    return model
+\end{lstlisting}
+
+分割任务使用 DeepLabV3-MobileNetV3。DeepLabV3 能够利用空洞卷积和多尺度上下文信息完成像素级预测，MobileNetV3 作为 backbone 可以减少一定计算开销。由于本实验只预测背景和宠物前景两类，因此需要将 DeepLabV3 的主分割头和辅助分割头输出通道数改为 2：
+
+\begin{lstlisting}[language=Python,caption={分割模型输出头替换代码}]
+def _replace_last_conv(module: nn.Sequential, num_classes: int) -> None:
+    last_layer = module[-1]
+    if not isinstance(last_layer, nn.Conv2d):
+        raise TypeError(f"Expected final layer to be nn.Conv2d, got {type(last_layer).__name__}")
+    module[-1] = nn.Conv2d(last_layer.in_channels, num_classes, kernel_size=1)
+
+
+def build_deeplabv3_mobilenet(num_classes: int = SEG_NUM_CLASSES, pretrained: bool = True):
+    weights = DeepLabV3_MobileNet_V3_Large_Weights.DEFAULT if pretrained else None
+    model = deeplabv3_mobilenet_v3_large(
+        weights=weights,
+        weights_backbone=None,
+        aux_loss=True,
+    )
+    _replace_last_conv(model.classifier, num_classes)
+    if model.aux_classifier is not None:
+        _replace_last_conv(model.aux_classifier, num_classes)
+    return model
+\end{lstlisting}
+
+训练过程中，分类和分割任务均使用交叉熵损失，优化器使用 AdamW。分类模型在每个 epoch 后记录训练损失、验证损失、验证 Accuracy、验证 Macro-F1、学习率和耗时；分割模型在每个 epoch 后记录训练损失、验证损失、Pixel Accuracy、背景 IoU、前景 IoU、mIoU、Dice、学习率和耗时。
+
+分类模型以验证集 Macro-F1 作为主要模型选择依据，当 Macro-F1 相同时再比较 Accuracy。分割模型以验证集 mIoU 作为主要模型选择依据，当 mIoU 相同时再比较 Dice。通过这种方式，可以在模型选择时同时考虑类别均衡表现和像素级分割质量。
 
 \subsubsection{评价与可视化方法}
 
-分类模型在官方测试集上计算 Accuracy、Macro-F1、Weighted-F1、Top-5 Accuracy 和每类 precision / recall / F1，并保存逐样本预测结果。EfficientNet-B0 的测试集混淆矩阵作为主分类模型可视化，ResNet18 的混淆矩阵作为对比材料保留。分割模型在官方测试集上计算 Pixel Accuracy、背景 IoU、前景 IoU、mIoU 和 Dice，并保存逐样本预测摘要、分割预测对比图和失败案例分析。
+分类模型训练完成后，在官方测试集上计算 Accuracy、Macro-F1、Weighted-F1、Top-5 Accuracy 以及每类 precision、recall、F1。Accuracy 用于衡量整体分类正确率，Macro-F1 对每个类别等权平均，适合观察 37 类宠物品种上的整体均衡表现，Top-5 Accuracy 用于观察真实类别是否出现在模型预测概率最高的前 5 个类别中。
+
+分割模型训练完成后，在官方测试集上计算 Pixel Accuracy、背景 IoU、前景 IoU、mIoU 和 Dice。Pixel Accuracy 反映所有像素的总体预测正确率，IoU 反映预测区域和真实区域的重叠程度，mIoU 对背景和前景 IoU 取平均，Dice 则重点反映宠物前景区域的重叠质量。
+
+分割指标计算的核心逻辑如下：
+
+\begin{lstlisting}[language=Python,caption={分割指标计算代码}]
+prediction = prediction.reshape(-1)
+target = target.reshape(-1)
+pixel_accuracy = float((prediction == target).sum().item() / target.numel())
+
+ious = []
+for class_id in (0, 1):
+    pred_class = prediction == class_id
+    target_class = target == class_id
+    intersection = torch.logical_and(pred_class, target_class).sum().item()
+    union = torch.logical_or(pred_class, target_class).sum().item()
+    ious.append(1.0 if union == 0 else float(intersection / union))
+
+foreground_intersection = torch.logical_and(prediction == 1, target == 1).sum().item()
+foreground_total = (prediction == 1).sum().item() + (target == 1).sum().item()
+dice = 1.0 if foreground_total == 0 else float((2 * foreground_intersection) / foreground_total)
+\end{lstlisting}
+
+可视化部分包括分类训练曲线、分割训练曲线、分类混淆矩阵、分类正确样例、分类错误样例、分割预测对比图和分割失败案例。所有图表和指标均由脚本根据真实运行输出生成，并保存到 \texttt{outputs/figures/} 和 \texttt{outputs/results/} 中，报告中的结果以这些文件为依据。
 
 \subsection{实验步骤}
 
-本实验按数据、模型、训练、评估和报告材料整理的顺序执行。具体步骤如下。
+本实验按照数据检查、预处理验证、模型训练、测试评估、可视化整理和报告编译的顺序进行，具体步骤如下：
 
 \begin{enumerate}
-  \item 确认实验环境和目录结构。统一使用 \texttt{D:\textbackslash Anaconda3\textbackslash envs\textbackslash unet\textbackslash python.exe} 运行脚本，并将权重、日志、图片和结果分别保存到 \texttt{outputs/checkpoints/}、\texttt{outputs/logs/}、\texttt{outputs/figures/} 和 \texttt{outputs/results/}。
-  \item 读取 Oxford-IIIT Pet 数据集。统计 37 类类别名称、样本数量、训练集类别分布和 trimap 像素值，生成数据样例图和类别分布图。
-  \item 固定数据划分。将官方 \texttt{trainval} 按随机种子 42 划分为 2944 张训练图像和 736 张验证图像，官方 \texttt{test} 的 3669 张图像仅用于最终测试。
-  \item 实现分类和分割预处理。分类 dataloader 输出 \texttt{[B, 3, 224, 224]} 图像和 \texttt{[B]} 标签；分割 dataloader 输出 \texttt{[B, 3, 320, 320]} 图像和 \texttt{[B, 320, 320]} mask。
-  \item 实现 trimap 二值转换。确认原始 trimap 只包含 1、2、3，并将其转换为背景 0、前景 1 的二值 mask，生成原图、原始 trimap、二值 mask 对比图。
-  \item 构建并训练 ResNet18 分类 baseline。保存训练日志 \texttt{outputs/logs/resnet18\_cls\_log.csv} 和最佳权重 \texttt{outputs/checkpoints/best\_cls\_resnet18.pth}。
-  \item 构建并训练 EfficientNet-B0 分类主模型。保存训练日志 \texttt{outputs/logs/efficientnet\_b0\_cls\_log.csv} 和最佳权重 \texttt{outputs/checkpoints/best\_cls\_efficientnet\_b0.pth}。
-  \item 构建并训练 DeepLabV3-MobileNetV3 分割模型。保存训练日志 \texttt{outputs/logs/deeplabv3\_mobilenet\_seg\_log.csv} 和最佳权重 \texttt{outputs/checkpoints/best\_seg\_deeplabv3\_mobilenet.pth}。
-  \item 在官方测试集上评估两个分类模型，保存分类指标、逐样本预测结果和混淆矩阵。
-  \item 在官方测试集上评估分割模型，保存分割指标、逐样本预测结果和分割预测可视化。
-  \item 汇总 ResNet18 与 EfficientNet-B0 的测试结果，形成轻量消融实验表和分析段落。
-  \item 整理报告图像、训练曲线、失败案例和原始记录，为结果分析章节提供依据。
+  \item 准备项目运行环境，确认使用 conda 环境 \texttt{unet}，并在项目根目录下执行所有脚本。
+  \item 检查 Oxford-IIIT Pet 数据集是否可正常读取，统计分类类别数、样本数、训练集类别分布和 trimap 像素值。
+  \item 使用固定随机种子 42 将官方 \texttt{trainval} split 划分为训练集和验证集，官方 \texttt{test} split 保持为最终测试集，并保存划分索引。
+  \item 检查分类任务的图像预处理流程，确认训练集增强、验证集和测试集确定性预处理能够正常输出。
+  \item 检查分割任务的图像和 mask 预处理流程，确认图像与 mask 空间变换同步，mask resize 未产生非法像素值。
+  \item 按二值前景分割规则检查 trimap 转换结果，确认原始值 2 映射为背景，原始值 1 和 3 映射为前景。
+  \item 训练 ResNet18 baseline 分类模型，保存训练日志和验证集最优模型权重。
+  \item 训练 EfficientNet-B0 主分类模型，保存训练日志和验证集最优模型权重。
+  \item 训练 DeepLabV3-MobileNetV3 分割模型，保存训练日志和验证集最优模型权重。
+  \item 在官方测试集上评估 ResNet18 和 EfficientNet-B0，生成分类指标 JSON、逐样本预测 CSV 和混淆矩阵图。
+  \item 在官方测试集上评估 DeepLabV3-MobileNetV3，生成分割指标 JSON、测试摘要 CSV 和逐样本预测记录。
+  \item 绘制分类和分割训练曲线，整理分类正确样例、分类错误样例、分割预测对比图和失败案例图。
+  \item 汇总 \texttt{outputs/results/}、\texttt{outputs/logs/}、\texttt{outputs/figures/} 中的实验材料，作为后续结果分析和报告插图的依据。
 \end{enumerate}
 
 \subsection{实验代码}
 
-\subsubsection{代码结构}
-
-项目代码集中在 \texttt{src/} 目录下。主要脚本职责见表 \ref{tab:code-structure}。
+本实验代码集中在 \texttt{src/} 目录下，训练日志、模型权重、结果文件和图片分别保存到 \texttt{outputs/logs/}、\texttt{outputs/checkpoints/}、\texttt{outputs/results/} 和 \texttt{outputs/figures/}。主要代码模块及其作用如表 \ref{tab:code-modules} 所示。
 
 \begin{table}[H]
 \centering
-\caption{核心代码文件说明}
-\label{tab:code-structure}
+\caption{主要代码模块说明}
+\label{tab:code-modules}
 \resizebox{\textwidth}{!}{
-\begin{tabular}{ll}
+\begin{tabular}{lll}
 \toprule
-文件 & 功能 \\
+模块 & 主要文件 & 作用 \\
 \midrule
-\texttt{src/config.py} & 集中定义随机种子、数据目录、输入尺寸、batch size 和输出目录。 \\
-\texttt{src/data\_transforms.py} & 实现分类 transform、分割同步 transform 和 trimap 二值转换函数。 \\
-\texttt{src/data\_loaders.py} & 构建分类和分割 Dataset/DataLoader，并复用固定 train/val/test 划分。 \\
-\texttt{src/models\_cls.py} & 构建 ResNet18 和 EfficientNet-B0，并替换 37 类分类头。 \\
-\texttt{src/models\_seg.py} & 构建 DeepLabV3-MobileNetV3，并替换 2 类分割输出头。 \\
-\texttt{src/train\_cls.py} & 分类训练循环、验证指标计算、CSV 日志写入和最佳权重保存。 \\
-\texttt{src/train\_seg.py} & 分割训练循环、mIoU/Dice 计算、辅助损失和最佳权重保存。 \\
-\texttt{src/eval\_cls.py} & 加载分类 checkpoint，在测试集上输出指标、逐样本预测和混淆矩阵。 \\
-\texttt{src/eval\_seg.py} & 加载分割 checkpoint，在测试集上输出 Pixel Accuracy、IoU、mIoU 和 Dice。 \\
+配置模块 & \texttt{src/config.py} & 统一保存路径、随机种子、类别数、输入尺寸、batch size 和输出目录配置 \\
+数据处理模块 & \texttt{src/data\_loaders.py}、\texttt{src/data\_transforms.py}、\texttt{src/segmentation\_utils.py} & 构建数据集、定义预处理和数据增强、完成 trimap 到二值 mask 的转换 \\
+分类模型模块 & \texttt{src/models\_cls.py} & 构建 ResNet18 baseline 和 EfficientNet-B0 主分类模型 \\
+分割模型模块 & \texttt{src/models\_seg.py} & 构建 DeepLabV3-MobileNetV3 前景二分类分割模型 \\
+训练模块 & \texttt{src/train\_cls.py}、\texttt{src/train\_seg.py} & 执行分类模型和分割模型训练，记录日志并保存最优权重 \\
+评估模块 & \texttt{src/eval\_cls.py}、\texttt{src/eval\_seg.py} & 在测试集上计算分类和分割指标，保存预测结果 \\
+可视化模块 & \texttt{src/plot\_cls\_training\_curve.py}、\texttt{src/plot\_seg\_training\_curve.py}、\texttt{src/visualize\_seg\_predictions.py} & 绘制训练曲线、混淆矩阵和分割预测可视化图 \\
+结果汇总模块 & \texttt{src/summarize\_cls\_eval.py} & 汇总分类评估结果，生成报告可引用的表格材料 \\
 \bottomrule
 \end{tabular}
 }
 \end{table}
 
-\subsubsection{核心代码片段}
+\subsubsection{数据处理模块重要代码}
 
-trimap 转二值 mask 是分割任务的关键预处理。代码中首先检查输入像素值是否合法，然后按方案 B 将原始值 2 映射为背景 0，将原始值 1 和 3 映射为前景 1。
+该模块主要用于完成数据集读取、固定划分、图像预处理和 mask 转换。分类数据集读取宠物品种标签，分割数据集读取 trimap 标注，二者使用相同的 train/val/test 划分口径。
 
-\begin{lstlisting}[language=Python,caption={trimap 转二值 mask 核心代码}]
-def convert_trimap_to_binary_mask(mask):
-    invalid = ~((mask == 1) | (mask == 2) | (mask == 3))
-    if bool(invalid.any().item()):
-        values = sorted(int(v) for v in torch.unique(mask).tolist())
-        raise ValueError(f"Unexpected trimap values: {values}")
-    return torch.where(mask == 2, torch.zeros_like(mask), torch.ones_like(mask)).long()
+数据读取和固定划分代码如下：
+
+\begin{lstlisting}[language=Python,caption={分类数据集读取与固定划分代码}]
+class OxfordPetClassificationDataset(Dataset):
+    def __init__(self, root=DATA_DIR, split="train", img_size=224,
+                 val_ratio=0.2, seed=SEED, download=False):
+        source_split = "test" if split == "test" else "trainval"
+        self.dataset = OxfordIIITPet(
+            root=str(root),
+            split=source_split,
+            target_types="category",
+            download=download,
+        )
+        self.indices = _select_indices(len(self.dataset), split, val_ratio, seed)
+        self.transform = build_classification_transform(split, img_size=img_size)
 \end{lstlisting}
 
-分类模型构建时只替换最后输出层，backbone 仍加载 ImageNet 预训练权重。这样可以复用通用视觉特征，并将输出维度调整为本实验需要的 37 类。
+分割预处理需要同时处理图像和 mask。图像使用双线性插值，mask 使用最近邻插值，随后将 trimap 转为二值 mask：
 
-\begin{lstlisting}[language=Python,caption={分类模型输出层替换核心代码}]
-model = resnet18(weights=ResNet18_Weights.DEFAULT)
-model.fc = nn.Linear(model.fc.in_features, 37)
+\begin{lstlisting}[language=Python,caption={分割图像与 mask 同步预处理代码}]
+image = F.resized_crop(
+    image, i, j, h, w,
+    size=[self.img_size, self.img_size],
+    interpolation=InterpolationMode.BILINEAR,
+    antialias=True,
+)
+mask = F.resized_crop(
+    mask, i, j, h, w,
+    size=[self.img_size, self.img_size],
+    interpolation=InterpolationMode.NEAREST,
+)
 
-model = efficientnet_b0(weights=EfficientNet_B0_Weights.DEFAULT)
+mask_tensor = torch.as_tensor(np.array(mask, dtype=np.int64), dtype=torch.long)
+mask_tensor = convert_trimap_to_binary_mask(mask_tensor)
+\end{lstlisting}
+
+这段代码保证了图像和 mask 的裁剪区域一致，同时避免 mask 在 resize 后出现非整数类别标签。
+
+\subsubsection{分类模型模块重要代码}
+
+该模块主要用于构建 37 类宠物品种分类模型。由于 TorchVision 的预训练分类模型默认输出 ImageNet 1000 类，因此需要将最后分类层替换为 37 类输出。
+
+ResNet18 baseline 的关键代码如下：
+
+\begin{lstlisting}[language=Python,caption={ResNet18 输出层替换代码}]
+weights = ResNet18_Weights.DEFAULT if pretrained else None
+model = resnet18(weights=weights)
+model.fc = nn.Linear(model.fc.in_features, num_classes)
+\end{lstlisting}
+
+EfficientNet-B0 主分类模型的关键代码如下：
+
+\begin{lstlisting}[language=Python,caption={EfficientNet-B0 输出层替换代码}]
+weights = EfficientNet_B0_Weights.DEFAULT if pretrained else None
+model = efficientnet_b0(weights=weights)
 in_features = model.classifier[-1].in_features
-model.classifier[-1] = nn.Linear(in_features, 37)
+model.classifier[-1] = nn.Linear(in_features, num_classes)
 \end{lstlisting}
 
-分割模型构建时将 DeepLabV3-MobileNetV3 的主输出头和辅助输出头都替换为 2 类卷积层，使模型输出背景和前景两类 logits。
+两段代码都保留了预训练模型的通用视觉特征提取部分，只替换与本任务类别数相关的输出层，使模型能够适配 Oxford-IIIT Pet 的 37 类分类任务。
 
-\begin{lstlisting}[language=Python,caption={分割模型输出头替换核心代码}]
+\subsubsection{分割模型模块重要代码}
+
+该模块主要用于构建宠物前景二分类语义分割模型。TorchVision 的 DeepLabV3-MobileNetV3 返回字典形式的输出，其中主输出位于 \texttt{output["out"]}，形状为 \texttt{[B, num\_classes, H, W]}。本实验将 \texttt{num\_classes} 设为 2，分别对应背景和宠物前景。
+
+模型输出头替换代码如下：
+
+\begin{lstlisting}[language=Python,caption={DeepLabV3-MobileNetV3 输出头替换代码}]
+def _replace_last_conv(module: nn.Sequential, num_classes: int) -> None:
+    last_layer = module[-1]
+    module[-1] = nn.Conv2d(last_layer.in_channels, num_classes, kernel_size=1)
+
+
 model = deeplabv3_mobilenet_v3_large(
-    weights=DeepLabV3_MobileNet_V3_Large_Weights.DEFAULT,
+    weights=weights,
     weights_backbone=None,
     aux_loss=True,
 )
-model.classifier[-1] = nn.Conv2d(model.classifier[-1].in_channels, 2, kernel_size=1)
-model.aux_classifier[-1] = nn.Conv2d(model.aux_classifier[-1].in_channels, 2, kernel_size=1)
+_replace_last_conv(model.classifier, num_classes)
+if model.aux_classifier is not None:
+    _replace_last_conv(model.aux_classifier, num_classes)
 \end{lstlisting}
 
-训练循环中，每个 epoch 后在验证集上计算指标，并在验证指标提升时保存 checkpoint。分类任务使用 Macro-F1 作为主要保存依据，分割任务使用 mIoU 作为主要保存依据。
+这段代码将主分割头和辅助分割头都改为 2 类输出，使模型可以对每个像素预测背景或宠物前景。
 
-\begin{lstlisting}[language=Python,caption={最佳模型保存逻辑示意}]
+\subsubsection{训练与评估模块重要代码}
+
+该模块主要用于执行模型训练、记录训练过程、保存验证集最优模型，并在测试集上计算最终指标。分类模型和分割模型都按 epoch 训练，并在每个 epoch 后进行验证。
+
+分类训练中，模型保存依据为验证集 Macro-F1；当 Macro-F1 相同时，再比较 Accuracy：
+
+\begin{lstlisting}[language=Python,caption={分类最佳模型保存代码}]
 improved = (val_macro_f1 > best_macro_f1) or (
     val_macro_f1 == best_macro_f1 and val_accuracy > best_accuracy
 )
 if improved:
+    best_macro_f1 = val_macro_f1
+    best_accuracy = val_accuracy
+    best_epoch = epoch
     torch.save(
         {
             "epoch": epoch,
             "model_state_dict": model.state_dict(),
+            "optimizer_state_dict": optimizer.state_dict(),
             "val_accuracy": val_accuracy,
             "val_macro_f1": val_macro_f1,
         },
@@ -487,96 +695,196 @@ if improved:
     )
 \end{lstlisting}
 
-\subsubsection{核心运行命令}
+分割训练中，模型保存依据为验证集 mIoU；当 mIoU 相同时，再比较 Dice：
 
-三个核心模型的训练命令如下。所有命令均在项目根目录下执行。
-
-\begin{lstlisting}[language=bash,caption={核心训练命令}]
-D:\Anaconda3\envs\unet\python.exe src\train_cls.py --model resnet18 --img-size 224 --batch-size 32 --epochs 20 --lr 1e-4 --pretrained
-D:\Anaconda3\envs\unet\python.exe src\train_cls.py --model efficientnet_b0 --img-size 224 --batch-size 32 --epochs 25 --lr 1e-4 --pretrained --amp --num-workers 0
-D:\Anaconda3\envs\unet\python.exe src\train_seg.py --model deeplabv3_mobilenet --data-root data\step6_data --img-size 320 --batch-size 4 --epochs 30 --lr 1e-4 --pretrained --binary-mask
+\begin{lstlisting}[language=Python,caption={分割最佳模型保存代码}]
+val_miou = float(val_metrics["miou"])
+val_dice = float(val_metrics["dice"])
+improved = (val_miou > best_miou) or (val_miou == best_miou and val_dice > best_dice)
+if improved:
+    best_miou = val_miou
+    best_dice = val_dice
+    best_epoch = epoch
+    torch.save(
+        {
+            "epoch": epoch,
+            "model_state_dict": model.state_dict(),
+            "optimizer_state_dict": optimizer.state_dict(),
+            "val_miou": val_metrics["miou"],
+            "val_dice": val_metrics["dice"],
+        },
+        checkpoint_path,
+    )
 \end{lstlisting}
 
-最终测试评估命令如下。
-
-\begin{lstlisting}[language=bash,caption={核心评估命令}]
-D:\Anaconda3\envs\unet\python.exe src\eval_cls.py --checkpoint outputs\checkpoints\best_cls_resnet18.pth --model resnet18 --split test
-D:\Anaconda3\envs\unet\python.exe src\eval_cls.py --checkpoint outputs\checkpoints\best_cls_efficientnet_b0.pth --model efficientnet_b0 --split test
-D:\Anaconda3\envs\unet\python.exe src\eval_seg.py --checkpoint outputs\checkpoints\best_seg_deeplabv3_mobilenet.pth --model deeplabv3_mobilenet --split test
-\end{lstlisting}
+分类评估脚本 \texttt{src/eval\_cls.py} 加载最优权重后，在测试集上执行前向推理，并保存指标、逐样本预测结果和混淆矩阵。分割评估脚本 \texttt{src/eval\_seg.py} 加载最优权重后，计算像素级指标，并保存逐样本分割预测摘要。报告中的 Accuracy、Macro-F1、mIoU、Dice 等数值均以这些脚本生成的真实结果文件为准。
 
 \section{实验过程原始记录}
 
-\subsection{数据样例与类别分布}
+本节对实验过程中形成的主要原始记录进行整理，包括数据划分记录、预处理检查结果、训练日志、测试指标和可视化图表等内容。相关文件统一保存在项目的 \texttt{outputs/} 目录下，其中 \texttt{outputs/logs/} 用于保存训练过程日志，\texttt{outputs/results/} 用于保存数据统计、指标计算和逐样本预测结果，\texttt{outputs/figures/} 用于保存数据样例、训练曲线、混淆矩阵和分割结果图，\texttt{outputs/checkpoints/} 用于保存训练过程中得到的最佳模型权重。通过这些记录，可以对实验过程和最终结果进行复查。
+
+\subsection{数据样例与类别分布记录}
+
+本实验使用 Oxford-IIIT Pet 数据集作为实验对象。该数据集包含 37 类宠物品种图像，同时提供品种分类标签和 trimap 分割标注，能够同时支持图像分类和前景分割两个任务。实验中使用固定随机种子 42 对官方 \texttt{trainval} 部分进行训练集和验证集划分，官方 \texttt{test} 部分保持独立，只在最终测试阶段使用。
+
+具体数据划分情况见表 \ref{tab:data-split-record}。划分索引已保存到 \texttt{outputs/results/split\_indices\_seed42.json}，后续分类训练、分割训练和模型评估均复用这一划分方式，从而保证不同实验之间的数据来源一致。
+
+\begin{table}[H]
+\centering
+\caption{数据划分记录}
+\label{tab:data-split-record}
+\begin{tabular}{lrl}
+\toprule
+划分 & 样本数 & 用途 \\
+\midrule
+官方 \texttt{trainval} & 3680 & 原始训练验证数据 \\
+\texttt{train} & 2944 & 模型训练 \\
+\texttt{val} & 736 & 训练过程验证和最佳模型选择 \\
+\texttt{test} & 3669 & 最终测试评估 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth,height=0.78\textheight,keepaspectratio]{outputs/figures/fig_dataset_samples.png}
+\includegraphics[width=0.95\textwidth,height=0.72\textheight,keepaspectratio]{outputs/figures/fig_dataset_samples.png}
 \caption{Oxford-IIIT Pet 数据集样例}
 \label{fig:dataset-samples}
 \end{figure}
 
-图 \ref{fig:dataset-samples} 展示了 Oxford-IIIT Pet 数据集中不同品种的样例图像。可以看到，数据集中既包含猫也包含犬，图像背景、拍摄角度、主体尺度和姿态差异较大，这使得分类任务不仅需要识别颜色和纹理，还需要利用脸部结构、耳朵形态、体型等细粒度特征。分割任务同样受到背景复杂度、毛发边界和主体裁剪范围的影响。
+图 \ref{fig:dataset-samples} 展示了数据集中不同宠物品种的图像样例。从样例可以看到，宠物图像在姿态、背景、拍摄距离和光照条件上差异较大；同时，部分猫狗品种在毛色、脸部结构和体型上较为相似，因此本实验中的分类任务具有一定的细粒度识别难度。
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth,height=0.78\textheight,keepaspectratio]{outputs/figures/fig_class_distribution.png}
+\includegraphics[width=0.95\textwidth,height=0.72\textheight,keepaspectratio]{outputs/figures/fig_class_distribution.png}
 \caption{训练集类别分布}
 \label{fig:class-distribution}
 \end{figure}
 
-图 \ref{fig:class-distribution} 给出了训练集的类别分布。官方 \texttt{trainval} 中多数类别约 100 张样本，经过固定随机划分后，训练集中各类别样本数量总体接近，但仍存在小幅波动。由于类别数量达到 37 类且部分类别外观相近，后续评估采用 Macro-F1 作为重要指标，以避免只依赖总体 Accuracy 而忽略类别级表现。
+图 \ref{fig:class-distribution} 展示了训练集中的类别分布情况。Oxford-IIIT Pet 数据集整体上较为均衡，但在固定随机划分后，不同类别在训练集和验证集中的样本数量仍会存在小幅波动。因此，在分类任务中，除整体 Accuracy 外，本实验还记录 Macro-F1，以便观察模型在各类别上的平均表现。
 
-\subsection{mask 转换记录}
+本部分原始记录文件见表 \ref{tab:data-record-files}。
+
+\begin{table}[H]
+\centering
+\caption{数据相关原始记录文件}
+\label{tab:data-record-files}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{ll}
+\toprule
+记录内容 & 文件路径 \\
+\midrule
+数据集统计摘要 & \texttt{outputs/results/data\_summary.json} \\
+类别分布 CSV & \texttt{outputs/results/class\_distribution.csv} \\
+固定划分索引 & \texttt{outputs/results/split\_indices\_seed42.json} \\
+数据样例图 & \texttt{outputs/figures/fig\_dataset\_samples.png} \\
+类别分布图 & \texttt{outputs/figures/fig\_class\_distribution.png} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{Mask 转换与预处理检查记录}
+
+Oxford-IIIT Pet 数据集提供的 trimap 标注包含 3 种像素值：\texttt{1} 表示宠物前景，\texttt{2} 表示背景，\texttt{3} 表示边界区域。由于本实验的分割目标是区分宠物前景和背景，因此需要先将原始 trimap 转换为二值 mask。具体做法是将原始像素值 \texttt{2} 映射为背景 \texttt{0}，将原始像素值 \texttt{1} 和 \texttt{3} 映射为前景 \texttt{1}。
+
+该转换规则见表 \ref{tab:mask-conversion-record}。转换完成后，分割模型只需要预测背景和前景两类，后续计算背景 IoU、前景 IoU、mIoU 和 Dice 时也均以该二值 mask 作为标签依据。
+
+\begin{table}[H]
+\centering
+\caption{trimap 到二值 mask 的转换规则}
+\label{tab:mask-conversion-record}
+\begin{tabular}{llrl}
+\toprule
+原始 trimap 值 & 原始含义 & 二值 mask 值 & 二值含义 \\
+\midrule
+\texttt{1} & 宠物前景 & 1 & 前景 \\
+\texttt{2} & 背景 & 0 & 背景 \\
+\texttt{3} & 边界区域 & 1 & 前景 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth,height=0.82\textheight,keepaspectratio]{outputs/figures/fig_mask_samples.png}
+\includegraphics[width=0.95\textwidth,height=0.76\textheight,keepaspectratio]{outputs/figures/fig_mask_samples.png}
 \caption{原始 trimap 与二值前景 mask 转换样例}
 \label{fig:mask-samples}
 \end{figure}
 
-图 \ref{fig:mask-samples} 对比了原图、原始 trimap 和转换后的二值 mask。转换后的前景区域覆盖宠物主体和原始边界区域，背景区域为 0。该图用于确认二值转换后没有出现前景、背景反置，也没有因 resize 插值产生异常类别值。
+图 \ref{fig:mask-samples} 展示了原始图像、原始 trimap 和二值 mask 的对比样例。通过该图可以检查 mask 转换是否正确，也可以直观观察边界像素并入前景后形成的标注区域。
 
-\subsection{训练曲线}
+分类任务和分割任务使用不同的输入尺寸。分类模型输入尺寸为 $224 \times 224$，分割模型输入尺寸为 $320 \times 320$。在分割任务中，图像 resize 使用普通图像插值方式，mask resize 使用最近邻插值，以避免离散类别标签在缩放过程中产生非法像素值。训练阶段的随机裁剪和水平翻转也对图像和 mask 同步执行，从而保证像素级标签与图像内容保持对齐。
+
+本部分原始记录文件见表 \ref{tab:preprocess-record-files}。
+
+\begin{table}[H]
+\centering
+\caption{mask 转换与预处理检查文件}
+\label{tab:preprocess-record-files}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{ll}
+\toprule
+记录内容 & 文件路径 \\
+\midrule
+trimap 转换规则 & \texttt{outputs/results/trimap\_rule\_step4.json} \\
+mask 转换抽查记录 & \texttt{outputs/results/mask\_conversion\_check.json} \\
+数据预处理检查记录 & \texttt{outputs/results/preprocessing\_check.json} \\
+DataLoader 检查记录 & \texttt{outputs/results/dataloader\_check.json} \\
+mask 样例图 & \texttt{outputs/figures/fig\_mask\_samples.png} \\
+预处理检查图 & \texttt{outputs/figures/fig\_preprocessing\_check.png} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{训练过程记录}
+
+本实验共完成三个核心训练实验，分别为 ResNet18 分类 baseline、EfficientNet-B0 分类主模型和 DeepLabV3-MobileNetV3 前景分割模型。三个实验均使用固定数据划分和固定随机种子，训练过程中的主要指标以 CSV 文件形式保存，便于后续绘制曲线和复核结果。
+
+训练过程概况见表 \ref{tab:training-record-overview}。分类模型以验证集 Macro-F1 作为主要模型选择依据，分割模型以验证集 mIoU 作为主要模型选择依据，并在验证指标最优时保存对应权重。
+
+\begin{table}[H]
+\centering
+\caption{训练过程记录概况}
+\label{tab:training-record-overview}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{llllrrl}
+\toprule
+实验编号 & 任务 & 模型 & 输入尺寸 & 训练 epoch & 最佳 epoch & 训练日志 \\
+\midrule
+Exp-1 & 分类 & ResNet18 & 224 & 20 & 15 & \texttt{outputs/logs/resnet18\_cls\_log.csv} \\
+Exp-2 & 分类 & EfficientNet-B0 & 224 & 25 & 13 & \texttt{outputs/logs/efficientnet\_b0\_cls\_log.csv} \\
+Exp-3 & 分割 & DeepLabV3-MobileNetV3 & 320 & 30 & 23 & \texttt{outputs/logs/deeplabv3\_mobilenet\_seg\_log.csv} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth,height=0.78\textheight,keepaspectratio]{outputs/figures/fig_cls_training_curve.png}
+\includegraphics[width=0.95\textwidth,height=0.72\textheight,keepaspectratio]{outputs/figures/fig_cls_training_curve.png}
 \caption{ResNet18 与 EfficientNet-B0 分类训练曲线}
 \label{fig:cls-training-curve}
 \end{figure}
 
-图 \ref{fig:cls-training-curve} 展示了两个分类模型的训练过程。ResNet18 在第 15 个 epoch 取得最佳验证 Macro-F1 0.930059，EfficientNet-B0 在第 13 个 epoch 取得最佳验证 Macro-F1 0.935778。两者的训练 loss 均持续下降，验证指标在中后期趋于稳定，说明迁移学习能较快适应 Oxford-IIIT Pet 的分类任务。EfficientNet-B0 的最佳验证指标略高，但训练总耗时也更长。
+图 \ref{fig:cls-training-curve} 展示了 ResNet18 和 EfficientNet-B0 的分类训练曲线。训练日志中记录了每个 epoch 的训练损失、验证损失、验证 Accuracy、验证 Macro-F1、学习率和耗时。从曲线变化可以看出，两个分类模型在训练过程中整体能够逐步提升验证指标，没有出现明显的 loss 发散现象，说明训练过程基本稳定。
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth,height=0.82\textheight,keepaspectratio]{outputs/figures/fig_seg_training_curve.png}
+\includegraphics[width=0.95\textwidth,height=0.76\textheight,keepaspectratio]{outputs/figures/fig_seg_training_curve.png}
 \caption{DeepLabV3-MobileNetV3 分割训练曲线}
 \label{fig:seg-training-curve}
 \end{figure}
 
-图 \ref{fig:seg-training-curve} 展示了 DeepLabV3-MobileNetV3 的分割训练过程。模型在前几个 epoch 内快速提升，随后验证 mIoU 和 Dice 缓慢上升并趋于平稳，最佳验证 mIoU 出现在第 23 个 epoch。训练过程未出现 loss 发散，说明二值 mask 规则、损失函数和指标计算口径保持一致。
+图 \ref{fig:seg-training-curve} 展示了 DeepLabV3-MobileNetV3 的分割训练曲线。分割训练日志记录了训练损失、验证损失、Pixel Accuracy、背景 IoU、前景 IoU、mIoU 和 Dice 等指标。根据训练记录，最佳验证 mIoU 出现在第 23 个 epoch，对应权重保存为 \texttt{outputs/checkpoints/best\_seg\_deeplabv3\_mobilenet.pth}。
 
-\subsection{模型输出样例}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.95\textwidth,height=0.78\textheight,keepaspectratio]{outputs/figures/fig_cls_correct_examples.png}
-\caption{EfficientNet-B0 分类正确样例}
-\label{fig:cls-correct-examples}
-\end{figure}
-
-图 \ref{fig:cls-correct-examples} 展示了 EfficientNet-B0 在测试集上的部分分类正确样例。模型能够在不同背景和姿态下识别具有明显外观特征的品种，说明预训练特征和轻量增强对提升泛化能力有帮助。
-
-\subsection{实验记录索引}
-
-训练日志、模型权重和指标文件均保存在 \texttt{outputs/} 目录下，主要原始记录见表 \ref{tab:record-index}。这些文件用于支撑后续结果表格、曲线图和错误案例分析。
+本部分原始记录文件见表 \ref{tab:training-record-files}。
 
 \begin{table}[H]
 \centering
-\caption{主要实验记录文件索引}
-\label{tab:record-index}
+\caption{训练日志与最佳权重文件}
+\label{tab:training-record-files}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{lll}
 \toprule
@@ -588,16 +896,156 @@ EfficientNet-B0 分类 & 训练日志 & \texttt{outputs/logs/efficientnet\_b0\_c
 EfficientNet-B0 分类 & 最佳权重 & \texttt{outputs/checkpoints/best\_cls\_efficientnet\_b0.pth} \\
 DeepLabV3-MobileNetV3 分割 & 训练日志 & \texttt{outputs/logs/deeplabv3\_mobilenet\_seg\_log.csv} \\
 DeepLabV3-MobileNetV3 分割 & 最佳权重 & \texttt{outputs/checkpoints/best\_seg\_deeplabv3\_mobilenet.pth} \\
-分类评估 & 测试汇总 & \texttt{outputs/results/cls\_test\_summary.csv} \\
-分割评估 & 测试汇总 & \texttt{outputs/results/seg\_summary\_deeplabv3\_mobilenet\_test.csv} \\
 \bottomrule
 \end{tabular}
 }
 \end{table}
 
+\subsection{测试数据与计算结果记录}
+
+模型训练完成后，本实验在官方测试集上分别评估两个分类模型和一个分割模型。测试集共包含 3669 张图像，只用于最终评估，不参与训练过程和最佳模型选择。
+
+分类任务的测试结果见表 \ref{tab:cls-test-record}。ResNet18 在测试集上的 Accuracy 为 0.883074，Macro-F1 为 0.881759；EfficientNet-B0 在测试集上的 Accuracy 为 0.899700，Macro-F1 为 0.898173。两个模型的 Top-5 Accuracy 均高于 0.98，说明在多数情况下，真实类别能够出现在模型预测概率最高的前几个候选类别中。
+
+\begin{table}[H]
+\centering
+\caption{分类任务测试结果记录}
+\label{tab:cls-test-record}
+\begin{tabular}{lrrrrr}
+\toprule
+模型 & Accuracy & Macro-F1 & Weighted-F1 & Top-5 Accuracy & Test Loss \\
+\midrule
+ResNet18 & 0.883074 & 0.881759 & 0.882539 & 0.986645 & 0.418459 \\
+EfficientNet-B0 & 0.899700 & 0.898173 & 0.898878 & 0.995639 & 0.344536 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+上述分类测试指标来自 \texttt{outputs/results/cls\_ablation\_test\_summary.csv}。逐样本预测结果分别保存为 \texttt{outputs/results/cls\_predictions\_resnet18\_test.csv} 和 \texttt{outputs/results/cls\_predictions\_efficientnet\_b0\_test.csv}，可用于进一步查看每张测试图像的真实类别、预测类别和预测置信度。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth,height=0.76\textheight,keepaspectratio]{outputs/figures/fig_confusion_matrix.png}
+\caption{EfficientNet-B0 测试集混淆矩阵记录}
+\label{fig:confusion-matrix-record}
+\end{figure}
+
+图 \ref{fig:confusion-matrix-record} 为 EfficientNet-B0 在测试集上的混淆矩阵。该图记录了 37 类宠物品种之间的预测分布情况，可用于观察哪些类别更容易被模型混淆，并为后续结果分析提供依据。
+
+分割任务的测试结果见表 \ref{tab:seg-test-record}。DeepLabV3-MobileNetV3 在测试集上的 Pixel Accuracy 为 0.961981，前景 IoU 为 0.913212，mIoU 为 0.924921，Dice 为 0.954638。这些结果来自 \texttt{outputs/results/seg\_metrics\_deeplabv3\_mobilenet.json} 和 \texttt{outputs/results/seg\_summary\_deeplabv3\_mobilenet\_test.csv}。
+
+\begin{table}[H]
+\centering
+\caption{分割任务测试结果记录}
+\label{tab:seg-test-record}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lrrrrrr}
+\toprule
+模型 & Pixel Accuracy & Background IoU & Foreground IoU & mIoU & Dice & Test Loss \\
+\midrule
+DeepLabV3-MobileNetV3 & 0.961981 & 0.936630 & 0.913212 & 0.924921 & 0.954638 & 0.116487 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+在分割评估过程中，程序还记录了有效像素数、背景/前景交并集、预测前景像素数和真实前景像素数等中间计算量。这些数值保存在 \texttt{outputs/results/seg\_metrics\_deeplabv3\_mobilenet.json} 中，可用于复查 mIoU 和 Dice 等指标的计算过程。
+
+\subsection{模型输出样例记录}
+
+除数值指标外，本实验还生成了分类和分割任务的可视化输出，用于更直观地观察模型预测效果。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth,height=0.72\textheight,keepaspectratio]{outputs/figures/fig_cls_correct_examples.png}
+\caption{EfficientNet-B0 分类正确样例}
+\label{fig:cls-correct-examples}
+\end{figure}
+
+图 \ref{fig:cls-correct-examples} 展示了 EfficientNet-B0 在测试集上的部分分类正确样例。样例中包含不同品种、不同背景和不同姿态的宠物图像，可以反映模型在常规样本上的识别情况。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth,height=0.72\textheight,keepaspectratio]{outputs/figures/fig_failure_cases.png}
+\caption{EfficientNet-B0 高置信度分类错误样例记录}
+\label{fig:failure-cases-record}
+\end{figure}
+
+图 \ref{fig:failure-cases-record} 展示了 EfficientNet-B0 的部分高置信度分类错误样例。这些样例主要作为后续错误分析的原始材料，具体错误原因可在第六节中结合品种外观相似性、拍摄角度和背景干扰等因素进一步讨论。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth,height=0.76\textheight,keepaspectratio]{outputs/figures/fig_seg_predictions.png}
+\caption{DeepLabV3-MobileNetV3 分割预测对比记录}
+\label{fig:seg-predictions-record}
+\end{figure}
+
+图 \ref{fig:seg-predictions-record} 展示了 DeepLabV3-MobileNetV3 在测试集上的分割预测对比，包括原图、真实 mask 和预测 mask。通过该图可以观察模型对宠物主体区域的定位效果，也可以看到模型在边界、遮挡、浅色背景等情况下可能出现的预测差异。
+
+本部分原始记录文件见表 \ref{tab:prediction-record-files}。
+
+\begin{table}[H]
+\centering
+\caption{模型输出样例相关记录文件}
+\label{tab:prediction-record-files}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{ll}
+\toprule
+记录内容 & 文件路径 \\
+\midrule
+EfficientNet-B0 分类样例记录 & \texttt{outputs/results/cls\_examples\_efficientnet\_b0.json} \\
+EfficientNet-B0 测试集逐样本预测 & \texttt{outputs/results/cls\_predictions\_efficientnet\_b0\_test.csv} \\
+ResNet18 测试集逐样本预测 & \texttt{outputs/results/cls\_predictions\_resnet18\_test.csv} \\
+分割测试集逐样本预测 & \texttt{outputs/results/seg\_predictions\_deeplabv3\_mobilenet\_test.csv} \\
+分割可视化样例记录 & \texttt{outputs/results/seg\_visualized\_samples.json} \\
+分割困难样例分析记录 & \texttt{outputs/results/seg\_failure\_analysis\_step10.md} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{实验记录索引}
+
+为便于复核实验过程，表 \ref{tab:record-index} 汇总了本实验中较为重要的原始记录文件。这些文件覆盖了数据划分、模型训练、测试指标、逐样本预测和可视化结果等内容，可以作为后续报告分析和实验复现的依据。
+
+\begin{table}[H]
+\centering
+\caption{主要实验记录文件索引}
+\label{tab:record-index}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lll}
+\toprule
+类别 & 记录内容 & 文件路径 \\
+\midrule
+数据 & 数据集统计摘要 & \texttt{outputs/results/data\_summary.json} \\
+数据 & 固定划分索引 & \texttt{outputs/results/split\_indices\_seed42.json} \\
+数据 & 类别分布统计 & \texttt{outputs/results/class\_distribution.csv} \\
+分类训练 & ResNet18 训练日志 & \texttt{outputs/logs/resnet18\_cls\_log.csv} \\
+分类训练 & EfficientNet-B0 训练日志 & \texttt{outputs/logs/efficientnet\_b0\_cls\_log.csv} \\
+分割训练 & DeepLabV3-MobileNetV3 训练日志 & \texttt{outputs/logs/deeplabv3\_mobilenet\_seg\_log.csv} \\
+分类评估 & 分类测试汇总 & \texttt{outputs/results/cls\_ablation\_test\_summary.csv} \\
+分类评估 & ResNet18 分类指标 & \texttt{outputs/results/cls\_metrics\_resnet18.json} \\
+分类评估 & EfficientNet-B0 分类指标 & \texttt{outputs/results/cls\_metrics\_efficientnet\_b0.json} \\
+分割评估 & 分割测试指标 & \texttt{outputs/results/seg\_metrics\_deeplabv3\_mobilenet.json} \\
+分割评估 & 分割测试汇总 & \texttt{outputs/results/seg\_summary\_deeplabv3\_mobilenet\_test.csv} \\
+可视化 & 分类训练曲线 & \texttt{outputs/figures/fig\_cls\_training\_curve.png} \\
+可视化 & 分割训练曲线 & \texttt{outputs/figures/fig\_seg\_training\_curve.png} \\
+可视化 & EfficientNet-B0 混淆矩阵 & \texttt{outputs/figures/fig\_confusion\_matrix.png} \\
+可视化 & 分割预测对比图 & \texttt{outputs/figures/fig\_seg\_predictions.png} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+综上，本实验的训练日志、测试指标、逐样本预测结果和可视化图表均已保存为可追溯文件。本节主要完成实验过程原始记录的整理，第六节将在这些记录的基础上进一步分析分类模型对比结果、类别混淆现象、分割模型表现以及实验结论。
+
 \section{实验结果、分析和结论}
 
+本实验以 Oxford-IIIT Pet 数据集为实验对象，完成了宠物品种分类和宠物前景语义分割两个任务。分类任务需要对 37 个宠物品种进行识别，实验中选取 ResNet18 作为 baseline，并使用 EfficientNet-B0 作为主要分类模型；分割任务则将原始 trimap 标注转换为宠物前景与背景二分类 mask，并使用 DeepLabV3-MobileNetV3 完成像素级预测。为了保证结果具有可比性，实验过程中使用固定随机种子 42 进行数据划分，官方测试集只用于最终评估，不参与训练和模型选择。
+
 \subsection{分类结果}
+
+分类任务在官方测试集上使用 Accuracy、Macro-F1、Weighted-F1 和 Top-5 Accuracy 作为评价指标。ResNet18 与 EfficientNet-B0 的测试结果如表 \ref{tab:cls-results} 所示。
 
 \begin{table}[H]
 \centering
@@ -613,7 +1061,11 @@ EfficientNet-B0 & 0.899700 & 0.898173 & 0.898878 & 0.995639 \\
 \end{tabular}
 \end{table}
 
-表 \ref{tab:cls-results} 表明，EfficientNet-B0 在官方测试集上的 Accuracy 为 0.899700，Macro-F1 为 0.898173，均高于 ResNet18 的 0.883074 和 0.881759。两者 Top-5 Accuracy 均较高，说明即使 Top-1 预测错误，真实类别通常仍能排在候选类别前列。EfficientNet-B0 相比 ResNet18 的 Accuracy 提升 0.016626，Macro-F1 提升 0.016414，说明主模型在整体预测和类别均衡表现上都有小幅优势。
+由表 \ref{tab:cls-results} 可以看出，EfficientNet-B0 在测试集上的 Accuracy 为 0.899700，Macro-F1 为 0.898173，均高于 ResNet18 的 Accuracy 0.883074 和 Macro-F1 0.881759。相比 ResNet18，EfficientNet-B0 的 Accuracy 提升了 0.016626，Macro-F1 提升了 0.016414。虽然从数值上看提升幅度不是特别大，但 Oxford-IIIT Pet 数据集包含 37 个宠物品种，许多品种之间差异较细，例如毛色、脸型、耳朵形状和身体比例都可能非常接近，因此该提升仍能说明 EfficientNet-B0 在细粒度分类任务中具有更好的特征表达能力。
+
+从 Top-5 Accuracy 看，两个模型的结果都比较高，其中 ResNet18 为 0.986645，EfficientNet-B0 为 0.995639。这说明在多数样本中，即使模型的 Top-1 预测结果不完全正确，真实类别也往往仍然位于前几个候选类别中。也就是说，模型通常能够判断出样本的大致类别范围，但在外观接近的品种之间仍容易出现排序错误。
+
+Accuracy 和 Macro-F1 的数值比较接近，说明模型没有明显依赖某几个样本数较多或较容易识别的类别，而是在整体类别上保持了相对均衡的表现。由于 Macro-F1 会对每个类别赋予相同权重，因此它比单纯的 Accuracy 更能反映模型在 37 个类别上的平均识别能力。EfficientNet-B0 在这两个指标上均优于 ResNet18，说明其整体预测能力和类别均衡表现都更好。
 
 \begin{figure}[H]
 \centering
@@ -622,7 +1074,7 @@ EfficientNet-B0 & 0.899700 & 0.898173 & 0.898878 & 0.995639 \\
 \label{fig:confusion-matrix}
 \end{figure}
 
-图 \ref{fig:confusion-matrix} 显示，EfficientNet-B0 的错误主要集中在外观相近的细粒度类别之间。最明显的混淆包括 American Pit Bull Terrier 被预测为 Staffordshire Bull Terrier、Ragdoll 与 Birman 双向混淆、Egyptian Mau 被预测为 Bengal、Russian Blue 被预测为 Bombay，以及 Basset Hound 被预测为 Beagle。这些类别在毛色、体型、脸部结构或姿态上高度相似，单张图像中的局部纹理和拍摄角度容易放大类别间歧义。
+结合图 \ref{fig:confusion-matrix} 和分类失败样例可以进一步发现，分类错误主要集中在外观相似的宠物品种之间。例如 American Pit Bull Terrier、Staffordshire Bull Terrier 和 American Bulldog 等犬类在头部轮廓、体型和毛色上较为接近，模型容易混淆；Ragdoll 与 Birman 等长毛猫品种在毛色分布和面部特征上相似，也会出现互相误判；Russian Blue 与 Bombay 等深色短毛猫在光照不足或纹理不明显的图像中也较难区分。这说明宠物品种分类不仅是普通图像分类问题，还具有一定细粒度识别特点，模型需要捕捉更局部、更细致的视觉差异。
 
 \begin{table}[H]
 \centering
@@ -645,6 +1097,8 @@ Birman & Ragdoll & 10 \\
 
 \subsection{分割结果}
 
+分割任务使用 DeepLabV3-MobileNetV3 对宠物前景进行二分类语义分割。测试阶段计算 Pixel Accuracy、Background IoU、Foreground IoU、mIoU 和 Dice 等指标，结果如表 \ref{tab:seg-results} 所示。
+
 \begin{table}[H]
 \centering
 \caption{分割模型测试集结果}
@@ -660,7 +1114,9 @@ DeepLabV3-MobileNetV3 & 0.961981 & 0.936630 & 0.913212 & 0.924921 & 0.954638 \\
 }
 \end{table}
 
-表 \ref{tab:seg-results} 表明，DeepLabV3-MobileNetV3 在官方测试集上取得 Pixel Accuracy 0.961981、mIoU 0.924921 和 Dice 0.954638。背景 IoU 为 0.936630，前景 IoU 为 0.913212，二者差距不大，说明模型不仅能识别大面积背景，也能较稳定地定位宠物前景。Dice 高于 mIoU，符合二者定义差异；总体来看，分割模型已经能满足报告中前景分割可视化和定量分析的要求。
+从表 \ref{tab:seg-results} 可以看出，DeepLabV3-MobileNetV3 在官方测试集上取得了 Pixel Accuracy 0.961981、mIoU 0.924921 和 Dice 0.954638。Pixel Accuracy 较高，说明模型在整体像素分类上具有较好的准确率；mIoU 和 Dice 也达到较高水平，说明预测出的宠物前景区域与真实 mask 之间具有较好的重合程度。
+
+进一步观察类别 IoU 可以发现，背景 IoU 为 0.936630，前景 IoU 为 0.913212，前景 IoU 略低于背景 IoU。这一现象符合任务特点：背景区域通常面积较大，边界相对简单，而宠物前景包含毛发、耳朵、尾巴、四肢等细小结构，边缘形状更加复杂，也更容易受到遮挡、裁剪和背景颜色的影响。因此，模型在前景边界处更容易出现漏分或误分。
 
 \begin{figure}[H]
 \centering
@@ -669,7 +1125,7 @@ DeepLabV3-MobileNetV3 & 0.961981 & 0.936630 & 0.913212 & 0.924921 & 0.954638 \\
 \label{fig:seg-predictions}
 \end{figure}
 
-图 \ref{fig:seg-predictions} 中，上半部分为测试集中分割效果较好的样例，下半部分为低 mIoU 困难样例。高质量样例中，模型能够较完整地覆盖宠物主体，并与真实 mask 保持较好重合；困难样例中常见问题包括浅色宠物与浅色背景对比不足、长毛边界复杂、近景裁剪导致上下文缺失，以及真实 trimap 边界与模型预测边界不完全一致。
+从图 \ref{fig:seg-predictions} 的分割预测可视化结果来看，大多数样本中模型能够比较完整地覆盖宠物主体，并能将宠物与背景区分开来。分割效果较好的样本通常具有主体清晰、轮廓完整、前景和背景对比明显等特点。相反，低 mIoU 样本通常出现在浅色宠物与浅色背景接近、长毛边界复杂、图像近景裁剪严重或标注边界本身较模糊的情况下。这些现象说明，模型已经能够学习到宠物主体的整体位置，但在精细边界和低对比区域仍然存在不足。
 
 \begin{table}[H]
 \centering
@@ -686,23 +1142,31 @@ DeepLabV3-MobileNetV3 & 0.961981 & 0.936630 & 0.913212 & 0.924921 & 0.954638 \\
 \end{tabular}
 \end{table}
 
+总体来看，DeepLabV3-MobileNetV3 在本实验的宠物前景分割任务中取得了较好的效果。该模型结构相对轻量，同时能保持较高的 mIoU 和 Dice，说明使用预训练语义分割模型进行迁移学习可以有效完成本数据集上的前景分割任务。
+
 \subsection{轻量消融实验}
+
+为了比较不同分类模型的效果，本实验对 ResNet18 baseline 和 EfficientNet-B0 主模型进行了轻量消融对比。两种模型使用相同的数据划分、相同的官方测试集和相同的输入尺寸，并且都加载 ImageNet 预训练权重进行微调。实验结果如表 \ref{tab:ablation} 所示。
 
 \begin{table}[H]
 \centering
 \caption{ResNet18 与 EfficientNet-B0 对比}
 \label{tab:ablation}
-\begin{tabular}{lrrrr}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lrrrrr}
 \toprule
-模型 & 最佳 epoch & 验证 Macro-F1 & 测试 Accuracy & 测试 Macro-F1 \\
+模型 & 最佳 epoch & 验证 Macro-F1 & 测试 Accuracy & 测试 Macro-F1 & 训练总耗时 \\
 \midrule
-ResNet18 & 15 & 0.930059 & 0.883074 & 0.881759 \\
-EfficientNet-B0 & 13 & 0.935778 & 0.899700 & 0.898173 \\
+ResNet18 & 15 & 0.930059 & 0.883074 & 0.881759 & 765.40 s \\
+EfficientNet-B0 & 13 & 0.935778 & 0.899700 & 0.898173 & 1010.81 s \\
 \bottomrule
 \end{tabular}
+}
 \end{table}
 
-表 \ref{tab:ablation} 对比了 ResNet18 baseline 和 EfficientNet-B0 主模型。两者使用相同数据划分、相同测试集和相同输入尺寸。EfficientNet-B0 的验证集 Macro-F1 和测试集 Macro-F1 均高于 ResNet18，说明其特征表达能力更适合本任务。但从训练记录看，EfficientNet-B0 总训练耗时约 1010.81 秒，高于 ResNet18 的 765.40 秒，因此性能提升伴随一定计算成本。综合结果看，EfficientNet-B0 适合作为分类主模型，ResNet18 适合作为结构简单、训练较快的 baseline。
+从表 \ref{tab:ablation} 可以看出，EfficientNet-B0 的验证集 Macro-F1 和测试集 Macro-F1 均高于 ResNet18，说明 EfficientNet-B0 在本分类任务中表现更好。EfficientNet-B0 在网络深度、宽度和分辨率之间进行了较均衡的设计，因此能够提取到更有效的图像特征，在宠物细粒度分类任务中具有一定优势。
+
+同时也可以看到，EfficientNet-B0 的训练总耗时约为 1010.81 秒，高于 ResNet18 的 765.40 秒。这说明模型性能提升并不是没有代价的，EfficientNet-B0 需要更多训练时间。综合来看，ResNet18 结构较简单、训练速度较快，适合作为 baseline；EfficientNet-B0 指标更高，更适合作为本实验的主分类模型。
 
 \subsection{失败案例分析}
 
@@ -713,14 +1177,20 @@ EfficientNet-B0 & 13 & 0.935778 & 0.899700 & 0.898173 \\
 \label{fig:failure-cases}
 \end{figure}
 
-图 \ref{fig:failure-cases} 选取了 EfficientNet-B0 的高置信度分类错误样例。错误并非完全随机，而是集中在视觉特征相似或图像信息不足的情况。例如 Russian Blue 与 Bombay 都可能呈现深色短毛和低纹理外观，Boxer 与 American Bulldog 在短毛、脸部轮廓和白色体表区域上相近，Basset Hound 与 Beagle 具有垂耳和棕白毛色等共同特征。对于 American Pit Bull Terrier 和 Staffordshire Bull Terrier，类别本身差异较细，模型容易依据局部头部或体型特征做出错误判断。
+从图 \ref{fig:failure-cases} 的分类失败案例看，模型的主要错误来自细粒度类别之间的相似性。犬类中，American Pit Bull Terrier、Staffordshire Bull Terrier 和 American Bulldog 等类别之间存在较多混淆，这些品种在头部形状、短毛纹理和身体比例上差异较小。猫类中，Ragdoll 与 Birman、Russian Blue 与 Bombay 等类别也容易被误判，主要原因是毛色、面部纹理和拍摄角度会影响模型对类别特征的判断。此外，部分图像存在遮挡、裁剪、姿态特殊或背景复杂等情况，也会增加分类难度。
+
+从分割失败案例看，模型的错误主要集中在边界复杂和前景背景对比不足的样本上。长毛宠物的毛发边缘不规则，模型预测的 mask 边界很难完全贴合真实标注；浅色宠物位于浅色背景中时，前景与背景差异不明显，容易出现漏分；近景裁剪样本中，宠物主体范围不完整，模型难以判断前景的完整边界。另外，Oxford-IIIT Pet 的 trimap 标注在边缘区域本身具有一定模糊性，模型预测边界与标注边界不完全一致也会影响 mIoU。
+
+这些失败案例说明，当前模型已经能够完成宠物主体识别和前景提取，但对于更细致的局部判别和复杂边界处理仍有提升空间。分类任务需要进一步提高模型对局部结构、毛发纹理和面部细节的关注；分割任务则需要进一步改善边界区域和低对比场景下的预测效果。
 
 \subsection{结论与改进方向}
 
-本实验完成了 Oxford-IIIT Pet 数据集上的 37 类宠物品种分类和宠物前景二分类语义分割。分类任务中，ResNet18 baseline 在测试集上取得 Accuracy 0.883074、Macro-F1 0.881759；EfficientNet-B0 主模型取得 Accuracy 0.899700、Macro-F1 0.898173，整体优于 ResNet18。分割任务中，DeepLabV3-MobileNetV3 在测试集上取得 Pixel Accuracy 0.961981、mIoU 0.924921、Dice 0.954638，能够较稳定地提取宠物前景区域。
+本实验完成了 Oxford-IIIT Pet 数据集上的 37 类宠物品种分类和宠物前景二分类语义分割。分类任务中，ResNet18 baseline 在测试集上取得 Accuracy 0.883074、Macro-F1 0.881759；EfficientNet-B0 主模型取得 Accuracy 0.899700、Macro-F1 0.898173，整体表现优于 ResNet18。分割任务中，DeepLabV3-MobileNetV3 在测试集上取得 Pixel Accuracy 0.961981、mIoU 0.924921 和 Dice 0.954638，能够较稳定地提取宠物前景区域。
 
-从错误分析看，分类任务的主要困难来自细粒度品种之间的相似性，尤其是斗牛犬相关类别、长毛猫类别以及深色短毛猫类别。分割任务的主要困难来自复杂毛发边界、低前景背景对比、近景裁剪和标注边界歧义。后续改进可以从三方面展开：第一，引入更细致的数据增强和类别重采样策略，改善易混淆类别的泛化能力；第二，尝试更强的分类 backbone 或细粒度分类方法，例如注意力机制、局部区域特征或多尺度输入；第三，在分割任务中尝试更高输入分辨率、边界损失或后处理方法，以提升毛发和边界区域的分割质量。
+通过本实验可以看出，迁移学习适用于 Oxford-IIIT Pet 这类中等规模图像数据集。分类模型加载 ImageNet 预训练权重后，可以在较少训练轮数内取得较好的分类效果；分割模型使用预训练 DeepLabV3-MobileNetV3，也能够在二分类前景分割任务上取得较高指标。同时，实验结果也表明，宠物品种分类中的相似类别区分和语义分割中的复杂边界处理仍然是主要难点。
 
-总体而言，本实验形成了从数据读取、预处理、模型训练、指标评估到可视化分析的完整流程。所有报告指标均来自保存的日志、权重和评估结果文件，能够支撑课程实验报告的复现和结果分析。
+后续可以从以下几个方面继续改进。首先，在分类任务中可以引入更有针对性的数据增强、类别重采样或难例挖掘方法，以改善易混淆类别的识别效果。其次，可以尝试更强的分类 backbone、注意力机制或局部区域特征方法，使模型更加关注脸部、毛发纹理和身体结构等关键细节。再次，在分割任务中可以尝试更高输入分辨率、边界损失或后处理方法，提高宠物毛发和轮廓区域的分割质量。最后，还可以探索使用分割结果辅助分类，例如先根据分割 mask 提取宠物主体区域，再进行品种分类，从而减少复杂背景对分类结果的干扰。
+
+总体而言，本实验较完整地完成了从数据处理、模型训练、指标评估到可视化分析的流程。通过对 ResNet18、EfficientNet-B0 和 DeepLabV3-MobileNetV3 的实验结果进行比较，可以更直观地理解不同模型结构在分类和分割任务中的作用，也加深了对迁移学习、评价指标、混淆矩阵和语义分割结果分析方法的认识。
 
 \end{document}
