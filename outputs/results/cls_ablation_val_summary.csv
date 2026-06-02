@@ -1,0 +1,3 @@
+model,display_name,phase,img_size,num_classes,pretrained,epochs_run,best_epoch,best_val_accuracy,best_val_macro_f1,best_val_loss,total_train_seconds,avg_epoch_seconds,log_path,checkpoint_path
+resnet18,ResNet18,validation,224,37,True,20,15,0.930707,0.930059,0.262803,765.4,38.27,outputs\logs\resnet18_cls_log.csv,outputs\checkpoints\best_cls_resnet18.pth
+efficientnet_b0,EfficientNet-B0,validation,224,37,True,25,13,0.9375,0.935778,0.227916,1010.81,40.43,outputs\logs\efficientnet_b0_cls_log.csv,outputs\checkpoints\best_cls_efficientnet_b0.pth

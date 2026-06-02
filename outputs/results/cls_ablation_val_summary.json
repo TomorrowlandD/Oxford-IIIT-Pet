@@ -1,0 +1,55 @@
+{
+  "purpose": "Step 7.4 validation-aligned comparison data reserved for Step 12 ablation. Final test metrics should be filled after Step 9 evaluation.",
+  "dataset": "Oxford-IIIT Pet",
+  "seed": 42,
+  "val_ratio": 0.2,
+  "split_sizes": {
+    "official_trainval": 3680,
+    "train": 2944,
+    "val": 736,
+    "test": 3669
+  },
+  "comparison_basis": "same fixed train/val split, same official test split reserved, same 224x224 classification input, same 37-class label mapping",
+  "models": [
+    {
+      "model": "resnet18",
+      "display_name": "ResNet18",
+      "phase": "validation",
+      "train_split": "official trainval 80% fixed seed 42",
+      "val_split": "official trainval 20% fixed seed 42",
+      "test_split_reserved": "official test split, not evaluated in step 7.4",
+      "img_size": 224,
+      "num_classes": 37,
+      "pretrained": true,
+      "epochs_run": 20,
+      "best_epoch": 15,
+      "best_val_accuracy": 0.930707,
+      "best_val_macro_f1": 0.930059,
+      "best_val_loss": 0.262803,
+      "total_train_seconds": 765.4,
+      "avg_epoch_seconds": 38.27,
+      "log_path": "outputs\\logs\\resnet18_cls_log.csv",
+      "checkpoint_path": "outputs\\checkpoints\\best_cls_resnet18.pth"
+    },
+    {
+      "model": "efficientnet_b0",
+      "display_name": "EfficientNet-B0",
+      "phase": "validation",
+      "train_split": "official trainval 80% fixed seed 42",
+      "val_split": "official trainval 20% fixed seed 42",
+      "test_split_reserved": "official test split, not evaluated in step 7.4",
+      "img_size": 224,
+      "num_classes": 37,
+      "pretrained": true,
+      "epochs_run": 25,
+      "best_epoch": 13,
+      "best_val_accuracy": 0.9375,
+      "best_val_macro_f1": 0.935778,
+      "best_val_loss": 0.227916,
+      "total_train_seconds": 1010.81,
+      "avg_epoch_seconds": 40.43,
+      "log_path": "outputs\\logs\\efficientnet_b0_cls_log.csv",
+      "checkpoint_path": "outputs\\checkpoints\\best_cls_efficientnet_b0.pth"
+    }
+  ]
+}

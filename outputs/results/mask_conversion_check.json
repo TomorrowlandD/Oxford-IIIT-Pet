@@ -1,0 +1,281 @@
+{
+  "step": "4.3",
+  "seed": 42,
+  "samples_per_split": 6,
+  "sample_count": 12,
+  "selected_conversion_rule": {
+    "name": "scheme_b_merge_border_into_foreground",
+    "mapping": {
+      "1": 1,
+      "2": 0,
+      "3": 1
+    },
+    "num_classes": 2,
+    "ignore_index": null,
+    "loss": "CrossEntropyLoss without ignore_index",
+    "metrics": "Pixel Accuracy, background/foreground IoU, mIoU, Dice over 0/1 labels"
+  },
+  "checks": {
+    "raw_values_ok": true,
+    "binary_values_ok": true,
+    "sample_count_ok": true
+  },
+  "records": [
+    {
+      "split": "trainval",
+      "index": 327,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Birman_125.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Birman_125.png",
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "binary_mask_values": [
+        0,
+        1
+      ],
+      "value_counts": {
+        "background_0": 40013,
+        "foreground_1": 126987,
+        "total": 167000
+      },
+      "foreground_ratio": 0.7604011976047904
+    },
+    {
+      "split": "trainval",
+      "index": 1593,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\shiba_inu_144.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\shiba_inu_144.png",
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "binary_mask_values": [
+        0,
+        1
+      ],
+      "value_counts": {
+        "background_0": 143986,
+        "foreground_1": 23014,
+        "total": 167000
+      },
+      "foreground_ratio": 0.13780838323353292
+    },
+    {
+      "split": "trainval",
+      "index": 1614,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Siamese_122.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Siamese_122.png",
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "binary_mask_values": [
+        0,
+        1
+      ],
+      "value_counts": {
+        "background_0": 33302,
+        "foreground_1": 133198,
+        "total": 166500
+      },
+      "foreground_ratio": 0.799987987987988
+    },
+    {
+      "split": "trainval",
+      "index": 2406,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Egyptian_Mau_161.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Egyptian_Mau_161.png",
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "binary_mask_values": [
+        0,
+        1
+      ],
+      "value_counts": {
+        "background_0": 91414,
+        "foreground_1": 81386,
+        "total": 172800
+      },
+      "foreground_ratio": 0.4709837962962963
+    },
+    {
+      "split": "trainval",
+      "index": 2845,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Maine_Coon_167.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Maine_Coon_167.png",
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "binary_mask_values": [
+        0,
+        1
+      ],
+      "value_counts": {
+        "background_0": 87727,
+        "foreground_1": 99773,
+        "total": 187500
+      },
+      "foreground_ratio": 0.5321226666666666
+    },
+    {
+      "split": "trainval",
+      "index": 3159,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Ragdoll_182.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Ragdoll_182.png",
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "binary_mask_values": [
+        0,
+        1
+      ],
+      "value_counts": {
+        "background_0": 106689,
+        "foreground_1": 83311,
+        "total": 190000
+      },
+      "foreground_ratio": 0.4384789473684211
+    },
+    {
+      "split": "test",
+      "index": 73,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Abyssinian_77.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Abyssinian_77.png",
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "binary_mask_values": [
+        0,
+        1
+      ],
+      "value_counts": {
+        "background_0": 115360,
+        "foreground_1": 72140,
+        "total": 187500
+      },
+      "foreground_ratio": 0.3847466666666667
+    },
+    {
+      "split": "test",
+      "index": 160,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\american_bulldog_65.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\american_bulldog_65.png",
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "binary_mask_values": [
+        0,
+        1
+      ],
+      "value_counts": {
+        "background_0": 131916,
+        "foreground_1": 34584,
+        "total": 166500
+      },
+      "foreground_ratio": 0.2077117117117117
+    },
+    {
+      "split": "test",
+      "index": 1471,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\german_shorthaired_90.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\german_shorthaired_90.png",
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "binary_mask_values": [
+        0,
+        1
+      ],
+      "value_counts": {
+        "background_0": 102968,
+        "foreground_1": 84532,
+        "total": 187500
+      },
+      "foreground_ratio": 0.4508373333333333
+    },
+    {
+      "split": "test",
+      "index": 1851,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\keeshond_73.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\keeshond_73.png",
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "binary_mask_values": [
+        0,
+        1
+      ],
+      "value_counts": {
+        "background_0": 78026,
+        "foreground_1": 89474,
+        "total": 167500
+      },
+      "foreground_ratio": 0.5341731343283582
+    },
+    {
+      "split": "test",
+      "index": 2116,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\miniature_pinscher_41.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\miniature_pinscher_41.png",
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "binary_mask_values": [
+        0,
+        1
+      ],
+      "value_counts": {
+        "background_0": 91845,
+        "foreground_1": 129655,
+        "total": 221500
+      },
+      "foreground_ratio": 0.5853498871331828
+    },
+    {
+      "split": "test",
+      "index": 2390,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\pomeranian_19.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\pomeranian_19.png",
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "binary_mask_values": [
+        0,
+        1
+      ],
+      "value_counts": {
+        "background_0": 96087,
+        "foreground_1": 80913,
+        "total": 177000
+      },
+      "foreground_ratio": 0.457135593220339
+    }
+  ],
+  "outputs": {
+    "figure": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\outputs\\figures\\fig_mask_samples.png",
+    "result": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\outputs\\results\\mask_conversion_check.json"
+  }
+}

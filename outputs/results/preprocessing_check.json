@@ -1,0 +1,218 @@
+{
+  "seed": 42,
+  "sample_indices": [
+    328,
+    1615,
+    2408,
+    2846
+  ],
+  "classification_image_size": 224,
+  "segmentation_image_size": 320,
+  "note": "Segmentation masks are raw Oxford-IIIT Pet trimaps at this step; binary conversion is handled in step 4.",
+  "records": [
+    {
+      "index": 328,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Birman_126.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Birman_126.png",
+      "label": 6,
+      "class_name": "Birman",
+      "classification_train_shape": [
+        3,
+        224,
+        224
+      ],
+      "classification_eval_shape": [
+        3,
+        224,
+        224
+      ],
+      "segmentation_train_image_shape": [
+        3,
+        320,
+        320
+      ],
+      "segmentation_train_mask_shape": [
+        320,
+        320
+      ],
+      "segmentation_eval_image_shape": [
+        3,
+        320,
+        320
+      ],
+      "segmentation_eval_mask_shape": [
+        320,
+        320
+      ],
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "segmentation_train_mask_values": [
+        1,
+        2,
+        3
+      ],
+      "segmentation_eval_mask_values": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "index": 1615,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Siamese_125.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Siamese_125.png",
+      "label": 32,
+      "class_name": "Siamese",
+      "classification_train_shape": [
+        3,
+        224,
+        224
+      ],
+      "classification_eval_shape": [
+        3,
+        224,
+        224
+      ],
+      "segmentation_train_image_shape": [
+        3,
+        320,
+        320
+      ],
+      "segmentation_train_mask_shape": [
+        320,
+        320
+      ],
+      "segmentation_eval_image_shape": [
+        3,
+        320,
+        320
+      ],
+      "segmentation_eval_mask_shape": [
+        320,
+        320
+      ],
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "segmentation_train_mask_values": [
+        1,
+        2,
+        3
+      ],
+      "segmentation_eval_mask_values": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "index": 2408,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Egyptian_Mau_163.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Egyptian_Mau_163.png",
+      "label": 11,
+      "class_name": "Egyptian Mau",
+      "classification_train_shape": [
+        3,
+        224,
+        224
+      ],
+      "classification_eval_shape": [
+        3,
+        224,
+        224
+      ],
+      "segmentation_train_image_shape": [
+        3,
+        320,
+        320
+      ],
+      "segmentation_train_mask_shape": [
+        320,
+        320
+      ],
+      "segmentation_eval_image_shape": [
+        3,
+        320,
+        320
+      ],
+      "segmentation_eval_mask_shape": [
+        320,
+        320
+      ],
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "segmentation_train_mask_values": [
+        1,
+        2,
+        3
+      ],
+      "segmentation_eval_mask_values": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "index": 2846,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Maine_Coon_168.jpg",
+      "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Maine_Coon_168.png",
+      "label": 20,
+      "class_name": "Maine Coon",
+      "classification_train_shape": [
+        3,
+        224,
+        224
+      ],
+      "classification_eval_shape": [
+        3,
+        224,
+        224
+      ],
+      "segmentation_train_image_shape": [
+        3,
+        320,
+        320
+      ],
+      "segmentation_train_mask_shape": [
+        320,
+        320
+      ],
+      "segmentation_eval_image_shape": [
+        3,
+        320,
+        320
+      ],
+      "segmentation_eval_mask_shape": [
+        320,
+        320
+      ],
+      "raw_trimap_values": [
+        1,
+        2,
+        3
+      ],
+      "segmentation_train_mask_values": [
+        1,
+        2,
+        3
+      ],
+      "segmentation_eval_mask_values": [
+        1,
+        2,
+        3
+      ]
+    }
+  ],
+  "outputs": {
+    "figure": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\outputs\\figures\\fig_preprocessing_check.png",
+    "result": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\outputs\\results\\preprocessing_check.json"
+  }
+}

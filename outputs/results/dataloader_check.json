@@ -1,0 +1,177 @@
+{
+  "seed": 42,
+  "val_ratio": 0.2,
+  "classification_image_size": 224,
+  "segmentation_image_size": 320,
+  "note": "Segmentation masks remain raw trimaps in Step 3. Binary conversion starts in Step 4.",
+  "classification": [
+    {
+      "split": "train",
+      "dataset_size": 2944,
+      "image_shape": [
+        4,
+        3,
+        224,
+        224
+      ],
+      "label_shape": [
+        4
+      ],
+      "image_dtype": "torch.float32",
+      "label_dtype": "torch.int64",
+      "label_min": 0,
+      "label_max": 30,
+      "checks": {
+        "image_shape_ok": true,
+        "label_shape_ok": true,
+        "label_range_ok": true,
+        "image_dtype_ok": true,
+        "label_dtype_ok": true
+      },
+      "passed": true
+    },
+    {
+      "split": "val",
+      "dataset_size": 736,
+      "image_shape": [
+        4,
+        3,
+        224,
+        224
+      ],
+      "label_shape": [
+        4
+      ],
+      "image_dtype": "torch.float32",
+      "label_dtype": "torch.int64",
+      "label_min": 0,
+      "label_max": 22,
+      "checks": {
+        "image_shape_ok": true,
+        "label_shape_ok": true,
+        "label_range_ok": true,
+        "image_dtype_ok": true,
+        "label_dtype_ok": true
+      },
+      "passed": true
+    },
+    {
+      "split": "test",
+      "dataset_size": 3669,
+      "image_shape": [
+        4,
+        3,
+        224,
+        224
+      ],
+      "label_shape": [
+        4
+      ],
+      "image_dtype": "torch.float32",
+      "label_dtype": "torch.int64",
+      "label_min": 0,
+      "label_max": 0,
+      "checks": {
+        "image_shape_ok": true,
+        "label_shape_ok": true,
+        "label_range_ok": true,
+        "image_dtype_ok": true,
+        "label_dtype_ok": true
+      },
+      "passed": true
+    }
+  ],
+  "segmentation": [
+    {
+      "split": "train",
+      "dataset_size": 2944,
+      "image_shape": [
+        2,
+        3,
+        320,
+        320
+      ],
+      "mask_shape": [
+        2,
+        320,
+        320
+      ],
+      "image_dtype": "torch.float32",
+      "mask_dtype": "torch.int64",
+      "mask_values": [
+        1,
+        2,
+        3
+      ],
+      "checks": {
+        "image_shape_ok": true,
+        "mask_shape_ok": true,
+        "raw_trimap_values_ok": true,
+        "image_dtype_ok": true,
+        "mask_dtype_ok": true
+      },
+      "passed": true
+    },
+    {
+      "split": "val",
+      "dataset_size": 736,
+      "image_shape": [
+        2,
+        3,
+        320,
+        320
+      ],
+      "mask_shape": [
+        2,
+        320,
+        320
+      ],
+      "image_dtype": "torch.float32",
+      "mask_dtype": "torch.int64",
+      "mask_values": [
+        1,
+        2,
+        3
+      ],
+      "checks": {
+        "image_shape_ok": true,
+        "mask_shape_ok": true,
+        "raw_trimap_values_ok": true,
+        "image_dtype_ok": true,
+        "mask_dtype_ok": true
+      },
+      "passed": true
+    },
+    {
+      "split": "test",
+      "dataset_size": 3669,
+      "image_shape": [
+        2,
+        3,
+        320,
+        320
+      ],
+      "mask_shape": [
+        2,
+        320,
+        320
+      ],
+      "image_dtype": "torch.float32",
+      "mask_dtype": "torch.int64",
+      "mask_values": [
+        1,
+        2,
+        3
+      ],
+      "checks": {
+        "image_shape_ok": true,
+        "mask_shape_ok": true,
+        "raw_trimap_values_ok": true,
+        "image_dtype_ok": true,
+        "mask_dtype_ok": true
+      },
+      "passed": true
+    }
+  ],
+  "passed": true
+}

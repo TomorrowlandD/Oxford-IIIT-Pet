@@ -1,0 +1,805 @@
+{
+  "dataset": "Oxford-IIIT Pet",
+  "data_root": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data",
+  "num_classes": 37,
+  "classes": [
+    "Abyssinian",
+    "American Bulldog",
+    "American Pit Bull Terrier",
+    "Basset Hound",
+    "Beagle",
+    "Bengal",
+    "Birman",
+    "Bombay",
+    "Boxer",
+    "British Shorthair",
+    "Chihuahua",
+    "Egyptian Mau",
+    "English Cocker Spaniel",
+    "English Setter",
+    "German Shorthaired",
+    "Great Pyrenees",
+    "Havanese",
+    "Japanese Chin",
+    "Keeshond",
+    "Leonberger",
+    "Maine Coon",
+    "Miniature Pinscher",
+    "Newfoundland",
+    "Persian",
+    "Pomeranian",
+    "Pug",
+    "Ragdoll",
+    "Russian Blue",
+    "Saint Bernard",
+    "Samoyed",
+    "Scottish Terrier",
+    "Shiba Inu",
+    "Siamese",
+    "Sphynx",
+    "Staffordshire Bull Terrier",
+    "Wheaten Terrier",
+    "Yorkshire Terrier"
+  ],
+  "seed": 42,
+  "val_ratio": 0.2,
+  "split_sizes": {
+    "official_trainval": 3680,
+    "train": 2944,
+    "val": 736,
+    "test": 3669
+  },
+  "official_trainval_class_counts": {
+    "Abyssinian": 100,
+    "American Bulldog": 100,
+    "American Pit Bull Terrier": 100,
+    "Basset Hound": 100,
+    "Beagle": 100,
+    "Bengal": 100,
+    "Birman": 100,
+    "Bombay": 96,
+    "Boxer": 100,
+    "British Shorthair": 100,
+    "Chihuahua": 100,
+    "Egyptian Mau": 93,
+    "English Cocker Spaniel": 96,
+    "English Setter": 100,
+    "German Shorthaired": 100,
+    "Great Pyrenees": 100,
+    "Havanese": 100,
+    "Japanese Chin": 100,
+    "Keeshond": 100,
+    "Leonberger": 100,
+    "Maine Coon": 100,
+    "Miniature Pinscher": 100,
+    "Newfoundland": 96,
+    "Persian": 100,
+    "Pomeranian": 100,
+    "Pug": 100,
+    "Ragdoll": 100,
+    "Russian Blue": 100,
+    "Saint Bernard": 100,
+    "Samoyed": 100,
+    "Scottish Terrier": 100,
+    "Shiba Inu": 100,
+    "Siamese": 99,
+    "Sphynx": 100,
+    "Staffordshire Bull Terrier": 100,
+    "Wheaten Terrier": 100,
+    "Yorkshire Terrier": 100
+  },
+  "split_class_counts": {
+    "train": {
+      "Abyssinian": 82,
+      "American Bulldog": 78,
+      "American Pit Bull Terrier": 83,
+      "Basset Hound": 87,
+      "Beagle": 85,
+      "Bengal": 79,
+      "Birman": 86,
+      "Bombay": 80,
+      "Boxer": 78,
+      "British Shorthair": 80,
+      "Chihuahua": 77,
+      "Egyptian Mau": 70,
+      "English Cocker Spaniel": 77,
+      "English Setter": 85,
+      "German Shorthaired": 84,
+      "Great Pyrenees": 84,
+      "Havanese": 82,
+      "Japanese Chin": 71,
+      "Keeshond": 75,
+      "Leonberger": 75,
+      "Maine Coon": 76,
+      "Miniature Pinscher": 84,
+      "Newfoundland": 73,
+      "Persian": 81,
+      "Pomeranian": 83,
+      "Pug": 81,
+      "Ragdoll": 77,
+      "Russian Blue": 78,
+      "Saint Bernard": 78,
+      "Samoyed": 77,
+      "Scottish Terrier": 79,
+      "Shiba Inu": 81,
+      "Siamese": 81,
+      "Sphynx": 78,
+      "Staffordshire Bull Terrier": 76,
+      "Wheaten Terrier": 80,
+      "Yorkshire Terrier": 83
+    },
+    "val": {
+      "Abyssinian": 18,
+      "American Bulldog": 22,
+      "American Pit Bull Terrier": 17,
+      "Basset Hound": 13,
+      "Beagle": 15,
+      "Bengal": 21,
+      "Birman": 14,
+      "Bombay": 16,
+      "Boxer": 22,
+      "British Shorthair": 20,
+      "Chihuahua": 23,
+      "Egyptian Mau": 23,
+      "English Cocker Spaniel": 19,
+      "English Setter": 15,
+      "German Shorthaired": 16,
+      "Great Pyrenees": 16,
+      "Havanese": 18,
+      "Japanese Chin": 29,
+      "Keeshond": 25,
+      "Leonberger": 25,
+      "Maine Coon": 24,
+      "Miniature Pinscher": 16,
+      "Newfoundland": 23,
+      "Persian": 19,
+      "Pomeranian": 17,
+      "Pug": 19,
+      "Ragdoll": 23,
+      "Russian Blue": 22,
+      "Saint Bernard": 22,
+      "Samoyed": 23,
+      "Scottish Terrier": 21,
+      "Shiba Inu": 19,
+      "Siamese": 18,
+      "Sphynx": 22,
+      "Staffordshire Bull Terrier": 24,
+      "Wheaten Terrier": 20,
+      "Yorkshire Terrier": 17
+    },
+    "test": {
+      "Abyssinian": 98,
+      "American Bulldog": 100,
+      "American Pit Bull Terrier": 100,
+      "Basset Hound": 100,
+      "Beagle": 100,
+      "Bengal": 100,
+      "Birman": 100,
+      "Bombay": 88,
+      "Boxer": 99,
+      "British Shorthair": 100,
+      "Chihuahua": 100,
+      "Egyptian Mau": 97,
+      "English Cocker Spaniel": 100,
+      "English Setter": 100,
+      "German Shorthaired": 100,
+      "Great Pyrenees": 100,
+      "Havanese": 100,
+      "Japanese Chin": 100,
+      "Keeshond": 99,
+      "Leonberger": 100,
+      "Maine Coon": 100,
+      "Miniature Pinscher": 100,
+      "Newfoundland": 100,
+      "Persian": 100,
+      "Pomeranian": 100,
+      "Pug": 100,
+      "Ragdoll": 100,
+      "Russian Blue": 100,
+      "Saint Bernard": 100,
+      "Samoyed": 100,
+      "Scottish Terrier": 99,
+      "Shiba Inu": 100,
+      "Siamese": 100,
+      "Sphynx": 100,
+      "Staffordshire Bull Terrier": 89,
+      "Wheaten Terrier": 100,
+      "Yorkshire Terrier": 100
+    }
+  },
+  "trimap": {
+    "sample_count_per_split": 24,
+    "scan_all_trimap_values": true,
+    "split_unique_values": {
+      "trainval": [
+        1,
+        2,
+        3
+      ],
+      "test": [
+        1,
+        2,
+        3
+      ]
+    },
+    "sample_records": [
+      {
+        "split": "trainval",
+        "index": 314,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Birman_113.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 326,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Birman_124.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 345,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Birman_141.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 470,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\British_Shorthair_120.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 671,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\english_setter_123.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 738,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\german_shorthaired_139.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 1363,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Russian_Blue_117.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 1585,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\shiba_inu_136.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 1606,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Siamese_112.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 1655,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Sphynx_114.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 1839,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\yorkshire_terrier_13.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 1885,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Abyssinian_185.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 1930,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\american_bulldog_188.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 2395,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Egyptian_Mau_14.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 2555,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\german_shorthaired_164.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 2633,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\great_pyrenees_18.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 2699,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\japanese_chin_159.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 2793,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\leonberger_153.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 2831,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\leonberger_188.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 2886,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\miniature_pinscher_147.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 3086,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\pug_151.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 3144,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Ragdoll_168.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 3410,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\shiba_inu_178.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "trainval",
+        "index": 3578,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\staffordshire_bull_terrier_19.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 160,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\american_bulldog_65.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 279,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\american_pit_bull_terrier_81.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 564,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Bengal_6.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 710,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Bombay_23.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 1193,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\english_cocker_spaniel_200.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 1328,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\english_setter_51.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 1342,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\english_setter_64.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 1358,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\english_setter_79.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 1504,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\great_pyrenees_2.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 1704,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\japanese_chin_2.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 1722,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\japanese_chin_46.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 1818,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\keeshond_42.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 1997,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Maine_Coon_254.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 2472,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\pomeranian_92.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 2498,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\pug_24.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 2718,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Russian_Blue_31.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 2725,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Russian_Blue_40.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 2772,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Russian_Blue_92.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 2839,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\saint_bernard_62.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 2919,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\samoyed_44.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 3256,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Siamese_77.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 3318,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Sphynx_2.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 3375,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\Sphynx_95.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "split": "test",
+        "index": 3543,
+        "mask_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\annotations\\trimaps\\wheaten_terrier_77.png",
+        "unique_values": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "value_meaning_for_report": {
+      "1": "pet foreground",
+      "2": "background",
+      "3": "border"
+    }
+  },
+  "dataset_samples": [
+    {
+      "split": "official trainval",
+      "index": 315,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Birman_114.jpg",
+      "label": 6,
+      "class_name": "Birman"
+    },
+    {
+      "split": "official trainval",
+      "index": 327,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Birman_125.jpg",
+      "label": 6,
+      "class_name": "Birman"
+    },
+    {
+      "split": "official trainval",
+      "index": 346,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Birman_142.jpg",
+      "label": 6,
+      "class_name": "Birman"
+    },
+    {
+      "split": "official trainval",
+      "index": 740,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\german_shorthaired_140.jpg",
+      "label": 14,
+      "class_name": "German Shorthaired"
+    },
+    {
+      "split": "official trainval",
+      "index": 1590,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\shiba_inu_141.jpg",
+      "label": 31,
+      "class_name": "Shiba Inu"
+    },
+    {
+      "split": "official trainval",
+      "index": 1611,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Siamese_117.jpg",
+      "label": 32,
+      "class_name": "Siamese"
+    },
+    {
+      "split": "official trainval",
+      "index": 1936,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\american_bulldog_193.jpg",
+      "label": 1,
+      "class_name": "American Bulldog"
+    },
+    {
+      "split": "official trainval",
+      "index": 2402,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Egyptian_Mau_156.jpg",
+      "label": 11,
+      "class_name": "Egyptian Mau"
+    },
+    {
+      "split": "official trainval",
+      "index": 2563,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\german_shorthaired_171.jpg",
+      "label": 14,
+      "class_name": "German Shorthaired"
+    },
+    {
+      "split": "official trainval",
+      "index": 2840,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Maine_Coon_160.jpg",
+      "label": 20,
+      "class_name": "Maine Coon"
+    },
+    {
+      "split": "official trainval",
+      "index": 3154,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\Ragdoll_177.jpg",
+      "label": 26,
+      "class_name": "Ragdoll"
+    },
+    {
+      "split": "official trainval",
+      "index": 3590,
+      "image_path": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\data\\oxford-iiit-pet\\images\\wheaten_terrier_155.jpg",
+      "label": 35,
+      "class_name": "Wheaten Terrier"
+    }
+  ],
+  "outputs": {
+    "split_indices": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\outputs\\results\\split_indices_seed42.json",
+    "class_distribution_csv": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\outputs\\results\\class_distribution.csv",
+    "class_distribution_figure": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\outputs\\figures\\fig_class_distribution.png",
+    "dataset_samples_figure": "D:\\DeepLearning Workplace\\Project\\05-CV Assignment\\outputs\\figures\\fig_dataset_samples.png"
+  }
+}

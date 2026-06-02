@@ -1,0 +1,112 @@
+split,class_index,class_name,count
+train,0,Abyssinian,82
+train,1,American Bulldog,78
+train,2,American Pit Bull Terrier,83
+train,3,Basset Hound,87
+train,4,Beagle,85
+train,5,Bengal,79
+train,6,Birman,86
+train,7,Bombay,80
+train,8,Boxer,78
+train,9,British Shorthair,80
+train,10,Chihuahua,77
+train,11,Egyptian Mau,70
+train,12,English Cocker Spaniel,77
+train,13,English Setter,85
+train,14,German Shorthaired,84
+train,15,Great Pyrenees,84
+train,16,Havanese,82
+train,17,Japanese Chin,71
+train,18,Keeshond,75
+train,19,Leonberger,75
+train,20,Maine Coon,76
+train,21,Miniature Pinscher,84
+train,22,Newfoundland,73
+train,23,Persian,81
+train,24,Pomeranian,83
+train,25,Pug,81
+train,26,Ragdoll,77
+train,27,Russian Blue,78
+train,28,Saint Bernard,78
+train,29,Samoyed,77
+train,30,Scottish Terrier,79
+train,31,Shiba Inu,81
+train,32,Siamese,81
+train,33,Sphynx,78
+train,34,Staffordshire Bull Terrier,76
+train,35,Wheaten Terrier,80
+train,36,Yorkshire Terrier,83
+val,0,Abyssinian,18
+val,1,American Bulldog,22
+val,2,American Pit Bull Terrier,17
+val,3,Basset Hound,13
+val,4,Beagle,15
+val,5,Bengal,21
+val,6,Birman,14
+val,7,Bombay,16
+val,8,Boxer,22
+val,9,British Shorthair,20
+val,10,Chihuahua,23
+val,11,Egyptian Mau,23
+val,12,English Cocker Spaniel,19
+val,13,English Setter,15
+val,14,German Shorthaired,16
+val,15,Great Pyrenees,16
+val,16,Havanese,18
+val,17,Japanese Chin,29
+val,18,Keeshond,25
+val,19,Leonberger,25
+val,20,Maine Coon,24
+val,21,Miniature Pinscher,16
+val,22,Newfoundland,23
+val,23,Persian,19
+val,24,Pomeranian,17
+val,25,Pug,19
+val,26,Ragdoll,23
+val,27,Russian Blue,22
+val,28,Saint Bernard,22
+val,29,Samoyed,23
+val,30,Scottish Terrier,21
+val,31,Shiba Inu,19
+val,32,Siamese,18
+val,33,Sphynx,22
+val,34,Staffordshire Bull Terrier,24
+val,35,Wheaten Terrier,20
+val,36,Yorkshire Terrier,17
+test,0,Abyssinian,98
+test,1,American Bulldog,100
+test,2,American Pit Bull Terrier,100
+test,3,Basset Hound,100
+test,4,Beagle,100
+test,5,Bengal,100
+test,6,Birman,100
+test,7,Bombay,88
+test,8,Boxer,99
+test,9,British Shorthair,100
+test,10,Chihuahua,100
+test,11,Egyptian Mau,97
+test,12,English Cocker Spaniel,100
+test,13,English Setter,100
+test,14,German Shorthaired,100
+test,15,Great Pyrenees,100
+test,16,Havanese,100
+test,17,Japanese Chin,100
+test,18,Keeshond,99
+test,19,Leonberger,100
+test,20,Maine Coon,100
+test,21,Miniature Pinscher,100
+test,22,Newfoundland,100
+test,23,Persian,100
+test,24,Pomeranian,100
+test,25,Pug,100
+test,26,Ragdoll,100
+test,27,Russian Blue,100
+test,28,Saint Bernard,100
+test,29,Samoyed,100
+test,30,Scottish Terrier,99
+test,31,Shiba Inu,100
+test,32,Siamese,100
+test,33,Sphynx,100
+test,34,Staffordshire Bull Terrier,89
+test,35,Wheaten Terrier,100
+test,36,Yorkshire Terrier,100

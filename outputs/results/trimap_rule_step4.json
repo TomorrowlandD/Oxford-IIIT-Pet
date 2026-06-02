@@ -1,0 +1,212 @@
+{
+  "step": "4.1-4.2",
+  "source": "Oxford-IIIT Pet annotations/trimaps",
+  "sample_count": 12,
+  "sample_selection": "first 6 stored trainval records and first 6 stored test records from data_summary.json; values re-read from mask files",
+  "observed_unique_values": [
+    1,
+    2,
+    3
+  ],
+  "value_meaning": {
+    "1": "pet foreground",
+    "2": "background",
+    "3": "border / boundary"
+  },
+  "selected_conversion_rule": {
+    "name": "scheme_b_merge_border_into_foreground",
+    "description": "Use a two-class mask: background=0, foreground=1. Original trimap value 2 maps to background; original values 1 and 3 map to foreground.",
+    "mapping": {
+      "1": 1,
+      "2": 0,
+      "3": 1
+    },
+    "num_classes": 2,
+    "ignore_index": null,
+    "loss": "CrossEntropyLoss without ignore_index",
+    "metrics": "Pixel Accuracy, foreground/background IoU, mIoU, Dice over ordinary 0/1 labels",
+    "reason": "This matches the project plan recommendation for a course report: simple, stable, and consistent with binary foreground/background segmentation."
+  },
+  "checked_samples": [
+    {
+      "split": "trainval",
+      "index": 314,
+      "mask_file": "Birman_113.png",
+      "unique_values": [
+        1,
+        2,
+        3
+      ],
+      "value_counts": {
+        "1": 69432,
+        "2": 94294,
+        "3": 24274
+      }
+    },
+    {
+      "split": "trainval",
+      "index": 326,
+      "mask_file": "Birman_124.png",
+      "unique_values": [
+        1,
+        2,
+        3
+      ],
+      "value_counts": {
+        "1": 67041,
+        "2": 85297,
+        "3": 14162
+      }
+    },
+    {
+      "split": "trainval",
+      "index": 345,
+      "mask_file": "Birman_141.png",
+      "unique_values": [
+        1,
+        2,
+        3
+      ],
+      "value_counts": {
+        "1": 29436,
+        "2": 110718,
+        "3": 26346
+      }
+    },
+    {
+      "split": "trainval",
+      "index": 470,
+      "mask_file": "British_Shorthair_120.png",
+      "unique_values": [
+        1,
+        2,
+        3
+      ],
+      "value_counts": {
+        "1": 64029,
+        "2": 111564,
+        "3": 11907
+      }
+    },
+    {
+      "split": "trainval",
+      "index": 671,
+      "mask_file": "english_setter_123.png",
+      "unique_values": [
+        1,
+        2,
+        3
+      ],
+      "value_counts": {
+        "1": 19490,
+        "2": 187715,
+        "3": 27795
+      }
+    },
+    {
+      "split": "trainval",
+      "index": 738,
+      "mask_file": "german_shorthaired_139.png",
+      "unique_values": [
+        1,
+        2,
+        3
+      ],
+      "value_counts": {
+        "1": 131386,
+        "2": 38256,
+        "3": 30358
+      }
+    },
+    {
+      "split": "test",
+      "index": 160,
+      "mask_file": "american_bulldog_65.png",
+      "unique_values": [
+        1,
+        2,
+        3
+      ],
+      "value_counts": {
+        "1": 15045,
+        "2": 131916,
+        "3": 19539
+      }
+    },
+    {
+      "split": "test",
+      "index": 279,
+      "mask_file": "american_pit_bull_terrier_81.png",
+      "unique_values": [
+        1,
+        2,
+        3
+      ],
+      "value_counts": {
+        "1": 62476,
+        "2": 84410,
+        "3": 19614
+      }
+    },
+    {
+      "split": "test",
+      "index": 564,
+      "mask_file": "Bengal_6.png",
+      "unique_values": [
+        1,
+        2,
+        3
+      ],
+      "value_counts": {
+        "1": 18298,
+        "2": 108568,
+        "3": 13634
+      }
+    },
+    {
+      "split": "test",
+      "index": 710,
+      "mask_file": "Bombay_23.png",
+      "unique_values": [
+        1,
+        2,
+        3
+      ],
+      "value_counts": {
+        "1": 60461,
+        "2": 88985,
+        "3": 20554
+      }
+    },
+    {
+      "split": "test",
+      "index": 1193,
+      "mask_file": "english_cocker_spaniel_200.png",
+      "unique_values": [
+        1,
+        2,
+        3
+      ],
+      "value_counts": {
+        "1": 92954,
+        "2": 49354,
+        "3": 28192
+      }
+    },
+    {
+      "split": "test",
+      "index": 1328,
+      "mask_file": "english_setter_51.png",
+      "unique_values": [
+        1,
+        2,
+        3
+      ],
+      "value_counts": {
+        "1": 28493,
+        "2": 127105,
+        "3": 11402
+      }
+    }
+  ]
+}
