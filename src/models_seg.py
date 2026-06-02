@@ -61,6 +61,7 @@ def build_deeplabv3_mobilenet(
     model = deeplabv3_mobilenet_v3_large(
         weights=weights,
         weights_backbone=None,
+        aux_loss=True,
     )
 
     _replace_last_conv(model.classifier, num_classes)

@@ -16,7 +16,9 @@ except ImportError:  # Allows lightweight tooling to import paths without torch.
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
-DATA_DIR = PROJECT_ROOT / "data"
+RAW_DATA_DIR = PROJECT_ROOT / "data"
+STEP6_DATA_DIR = RAW_DATA_DIR / "step6_data"
+DATA_DIR = STEP6_DATA_DIR if (STEP6_DATA_DIR / "oxford-iiit-pet").exists() else RAW_DATA_DIR
 OXFORD_PET_ROOT = DATA_DIR / "oxford-iiit-pet"
 
 OUTPUT_DIR = PROJECT_ROOT / "outputs"
