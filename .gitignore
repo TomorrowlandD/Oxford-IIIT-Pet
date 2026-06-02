@@ -20,9 +20,9 @@ env/
 *.rar
 *.7z
 
-# Training outputs that are too large or reproducible
+# Training artifacts that are too large or reproducible
 /outputs/checkpoints/
-/outputs/logs/
+/outputs/torch_cache/
 *.pth
 *.pt
 *.ckpt
@@ -30,8 +30,8 @@ env/
 *.safetensors
 events.out.tfevents*
 
-# Keep report figures and metric files available for optional tracking.
-# Do not ignore /outputs/figures/ or /outputs/results/ here.
+# Keep logs, report figures, and metric files available for tracking.
+# Do not ignore /outputs/logs/, /outputs/figures/, or /outputs/results/ here.
 
 # LaTeX build artifacts
 *.aux

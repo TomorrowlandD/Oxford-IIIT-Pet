@@ -1,0 +1,27 @@
+model: resnet18
+device: cuda
+train_size: 2944
+val_size: 736
+log: D:\DeepLearning Workplace\Project\05-CV Assignment\outputs\logs\resnet18_cls_log.csv
+checkpoint: D:\DeepLearning Workplace\Project\05-CV Assignment\outputs\checkpoints\best_cls_resnet18.pth
+epoch 001/020 train_loss=1.8430 val_loss=0.7767 val_acc=0.8315 val_macro_f1=0.8225 time=37.9s saved
+epoch 002/020 train_loss=0.5432 val_loss=0.5303 val_acc=0.8736 val_macro_f1=0.8668 time=36.8s saved
+epoch 003/020 train_loss=0.2614 val_loss=0.4169 val_acc=0.8845 val_macro_f1=0.8795 time=47.1s saved
+epoch 004/020 train_loss=0.1513 val_loss=0.3600 val_acc=0.9103 val_macro_f1=0.9078 time=39.4s saved
+epoch 005/020 train_loss=0.0923 val_loss=0.3272 val_acc=0.9062 val_macro_f1=0.9040 time=34.7s 
+epoch 006/020 train_loss=0.0650 val_loss=0.3284 val_acc=0.9035 val_macro_f1=0.9015 time=37.3s 
+epoch 007/020 train_loss=0.0386 val_loss=0.2946 val_acc=0.9198 val_macro_f1=0.9178 time=40.7s saved
+epoch 008/020 train_loss=0.0339 val_loss=0.3179 val_acc=0.9090 val_macro_f1=0.9063 time=39.5s 
+epoch 009/020 train_loss=0.0257 val_loss=0.2822 val_acc=0.9307 val_macro_f1=0.9291 time=41.9s saved
+epoch 010/020 train_loss=0.0209 val_loss=0.2779 val_acc=0.9226 val_macro_f1=0.9201 time=41.4s 
+epoch 011/020 train_loss=0.0190 val_loss=0.2940 val_acc=0.9266 val_macro_f1=0.9256 time=37.5s 
+epoch 012/020 train_loss=0.0113 val_loss=0.2890 val_acc=0.9185 val_macro_f1=0.9173 time=35.9s 
+epoch 013/020 train_loss=0.0140 val_loss=0.3048 val_acc=0.9117 val_macro_f1=0.9108 time=35.2s 
+epoch 014/020 train_loss=0.0139 val_loss=0.3038 val_acc=0.9158 val_macro_f1=0.9141 time=35.7s 
+epoch 015/020 train_loss=0.0112 val_loss=0.2628 val_acc=0.9307 val_macro_f1=0.9301 time=35.6s saved
+epoch 016/020 train_loss=0.0214 val_loss=0.3728 val_acc=0.8940 val_macro_f1=0.8915 time=35.2s 
+epoch 017/020 train_loss=0.0419 val_loss=0.3812 val_acc=0.8818 val_macro_f1=0.8789 time=38.8s 
+epoch 018/020 train_loss=0.0170 val_loss=0.3292 val_acc=0.9130 val_macro_f1=0.9111 time=38.5s 
+epoch 019/020 train_loss=0.0116 val_loss=0.3579 val_acc=0.9008 val_macro_f1=0.8988 time=37.8s 
+epoch 020/020 train_loss=0.0063 val_loss=0.3163 val_acc=0.9117 val_macro_f1=0.9084 time=38.5s 
+best_epoch=15, best_val_accuracy=0.930707, best_val_macro_f1=0.930059
